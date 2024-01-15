@@ -1,0 +1,102 @@
+.navbar-custom {
+    width: 7%;
+}
+
+.full-height {
+    height: 100vh;
+    align-items: flex-start;
+}
+
+body, html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table-container {
+    justify-content: center;
+    max-height: 100%;
+    overflow-y: auto;
+    margin-top: 2rem;
+    margin-right: 8.5rem;
+}
+
+.table-row {
+    justify-content: center;
+    margin-top: 2rem;
+
+}
+
+.table-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+}
+
+.table-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    width: auto;
+    border: 1px solid #000000;
+    padding: .375rem .75rem;
+    border-radius: .25rem;
+}
+
+
+.button-remove-table {
+    margin-left: 2rem;
+}
+
+.button-add-table {
+    margin-left: 0.5rem;
+}
+
+.mr-2 {
+    text-align: center;
+    width: auto;
+}
+
+.custom-container {
+    height: 100vh;
+    justify-content: center;
+}
+
+.staff-table {
+    margin-top: 2rem;
+    margin-right: 8.5rem;
+}
+
+.staff-form {
+    margin-top: auto;
+    margin-bottom: auto;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+}
+
+.menu-form{
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 1px;
+}
+
+.cart-button{
+    margin-top: 30rem;
+    margin-bottom: auto;
+    margin-left: 75rem;
+    width: auto;
+}
