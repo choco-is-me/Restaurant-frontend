@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 
 const Menu = () => {
-    const navigate = useNavigate();
+    const [selectedItems, setSelectedItems] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
     const [ingredients, setIngredients] = useState([]);
     const [cart, setCart] = useState([]);
@@ -26,12 +25,20 @@ const Menu = () => {
         })
             .then((response) => response.json())
             .then((data) => setIngredients(data));
+
+        // After fetching data, synchronize selectedItems with local storage
+        const existingOrder = JSON.parse(localStorage.getItem("order"));
+        if (existingOrder && existingOrder.items) {
+            setSelectedItems(existingOrder.items.map((i) => i.itemId));
+        } else {
+            setSelectedItems([]);
+        }
     }, []);
 
     const addToCart = (item) => {
         const existingOrder = JSON.parse(localStorage.getItem("order"));
         const existingTable = localStorage.getItem("selectedTable");
-        const existingStaff = localStorage.getItem("staffId");
+        const existingStaff = localStorage.getItem("staffID");
 
         if (!existingTable) {
             alert("Please go back to select a table.");
@@ -45,34 +52,45 @@ const Menu = () => {
             items: [],
         };
 
-        const existingItem = order.items.find((i) => i.itemId === item.itemID);
-
-        if (existingItem) {
-            alert("This item has already been added to the cart.");
-            return;
-        }
-
-        if (item.inStock === 2) {
-            alert("This item is out of stock.");
-            return;
-        }
-
-        const ingredient = ingredients.find(
-            (i) => i.ingredientID === item.itemID
+        const existingItemIndex = order.items.findIndex(
+            (i) => i.itemId === item.itemID
         );
 
-        if (ingredient && ingredient.amount < ingredient.threshold) {
-            alert("The ingredient for this item is not enough.");
-            return;
+        if (existingItemIndex !== -1) {
+            order.items.splice(existingItemIndex, 1);
+            alert("This item has been removed from the cart.");
+        } else {
+            if (item.inStock === 2) {
+                alert("This item is out of stock.");
+                return;
+            }
+
+            const ingredientsForItem = ingredients.filter(
+                (i) => i.itemID === item.itemID
+            );
+
+            if (
+                ingredientsForItem.some(
+                    (ingredient) => ingredient.amount < ingredient.threshold
+                )
+            ) {
+                alert("The ingredients for this item are not enough.");
+                return;
+            }
+
+            order.items.push({
+                itemId: item.itemID,
+                quantity: 1,
+            });
         }
 
-        order.items.push({
-            itemId: item.itemID,
-            quantity: 1,
-        });
-
-        localStorage.setItem("order", JSON.stringify(order));
+        if (order.items.length === 0) {
+            localStorage.removeItem("order");
+        } else {
+            localStorage.setItem("order", JSON.stringify(order));
+        }
         setCart(order.items);
+        setSelectedItems(order.items.map((i) => i.itemId));
     };
 
     // Group the menu items into sub-arrays of 4 items each
@@ -91,7 +109,7 @@ const Menu = () => {
     return (
         <Container style={{ paddingTop: "50px", marginTop: "50rem" }}>
             <Button
-                onClick={() => navigate("/cart")}
+                variant="dark"
                 style={{ position: "fixed", top: 20, right: 20 }}
             >
                 Cart ({cart.length})
@@ -100,7 +118,17 @@ const Menu = () => {
                 <Row key={rowIndex} className="mb-4">
                     {rowItems.map((item) => (
                         <Col xs={6} md={3} key={item.itemID} className="mb-4">
-                            <Card style={{ width: "18rem" }}>
+                            <Card
+                                style={{
+                                    width: "18rem",
+                                    // Change the background color if the item is selected
+                                    backgroundColor: selectedItems.includes(
+                                        item.itemID
+                                    )
+                                        ? "orange"
+                                        : "white",
+                                }}
+                            >
                                 <Card.Img
                                     variant="top"
                                     src={require(`../images/${item.itemID}.png`)}
@@ -110,7 +138,7 @@ const Menu = () => {
                                     <Card.Title>{item.name}</Card.Title>
                                     <Card.Text>{item.price}</Card.Text>
                                     <Button
-                                        variant="primary"
+                                        variant="dark"
                                         onClick={() => addToCart(item)}
                                     >
                                         +

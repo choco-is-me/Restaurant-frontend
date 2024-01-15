@@ -9,7 +9,6 @@ import AdminLayout from "./layouts/Admin";
 import Login from "./pages/Login";
 import Table from "./pages/Table";
 import Menu from "./pages/Menu";
-import Cart from "./pages/Cart";
 import Order from "./pages/Order";
 import Payment from "./pages/Payment";
 import Ingredient from "./pages/Ingredient";
@@ -32,7 +31,6 @@ const App = () => {
                 <Route path="/waiter" element={<WaiterLayout />}>
                     <Route index element={<Table />} />
                     <Route path="menu" element={<Menu />} />
-                    <Route path="cart" element={<Cart />} />
                     <Route path="order" element={<Order />} />
                     <Route path="payment" element={<Payment />} />
                     <Route path="logout" element={<Logout />} />
@@ -41,7 +39,6 @@ const App = () => {
                     <Route index element={<Record />} />
                     <Route path="table" element={<Table />} />
                     <Route path="menu" element={<Menu />} />
-                    <Route path="cart" element={<Cart />} />
                     <Route path="order" element={<Order />} />
                     <Route path="payment" element={<Payment />} />
                     <Route path="logout" element={<Logout />} />
@@ -55,7 +52,6 @@ const App = () => {
                     <Route index element={<ManageStaff />} />
                     <Route path="table" element={<Table />} />
                     <Route path="menu" element={<Menu />} />
-                    <Route path="cart" element={<Cart />} />
                     <Route path="ingredient" element={<Ingredient />} />
                     <Route path="order" element={<Order />} />
                     <Route path="payment" element={<Payment />} />

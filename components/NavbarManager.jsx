@@ -17,7 +17,6 @@ export default function NavbarComponentManager() {
                         <Nav.Link href="/manager">Record</Nav.Link>
                         <Nav.Link href="/manager/table">Table</Nav.Link>
                         <Nav.Link href="/manager/menu">Menu</Nav.Link>
-                        <Nav.Link href="/manager/cart">Cart</Nav.Link>
                         <Nav.Link href="/manager/order">Order</Nav.Link>
                         <Nav.Link href="/manager/payment">Payment</Nav.Link>
                         <Nav.Link href="/manager/logout">Logout</Nav.Link>

@@ -26,16 +26,18 @@ body {
 
 .table-container {
     justify-content: center;
+    align-items: center;
     max-height: 100%;
     overflow-y: auto;
-    margin-top: 2rem;
-    margin-right: 8.5rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .table-row {
     justify-content: center;
     margin-top: 2rem;
-
 }
 
 .table-form {
@@ -58,14 +60,19 @@ body {
 
 
 .button-remove-table {
-    margin-left: 2rem;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .button-add-table {
-    margin-left: 0.5rem;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .mr-2 {
+    display: flex;
     text-align: center;
     width: auto;
 }

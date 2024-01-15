@@ -16,7 +16,6 @@ export default function NavbarComponentWaiter() {
                         <Navbar.Brand className="mx-auto">Waiter</Navbar.Brand>
                         <Nav.Link href="/waiter">Table</Nav.Link>
                         <Nav.Link href="/waiter/menu">Menu</Nav.Link>
-                        <Nav.Link href="/waiter/cart">Cart</Nav.Link>
                         <Nav.Link href="/waiter/order">Order</Nav.Link>
                         <Nav.Link href="/waiter/payment">Payment</Nav.Link>
                         <Nav.Link href="/waiter/logout">Logout</Nav.Link>

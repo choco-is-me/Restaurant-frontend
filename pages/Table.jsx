@@ -73,12 +73,9 @@ const Table = () => {
 
     return (
         <Container className="table-container">
-            {tables.map((table, index) => (
-                <Row
-                    key={index}
-                    className="justify-content-center mb-3 table-row"
-                >
-                    <Col md={4}>
+            <Row className="table-row">
+                {tables.map((table, index) => (
+                    <Col md={4} sm={6} xs={12} key={index} className="mb-4">
                         <Row>
                             <Col xs={2}>
                                 <Button
@@ -91,7 +88,7 @@ const Table = () => {
                                     x
                                 </Button>
                             </Col>
-                            <Col xs={7}>
+                            <Col xs={10}>
                                 {table.guestName ? (
                                     <input
                                         type="text"
@@ -136,8 +133,8 @@ const Table = () => {
                             </Col>
                         </Row>
                     </Col>
-                </Row>
-            ))}
+                ))}
+            </Row>
         </Container>
     );
 };
