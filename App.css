@@ -19,6 +19,19 @@ body {
     margin: 0;
 }
 
+/* Customize the toast message */
+.toast-message {
+    background-color: #333; /* Change the color of the toast box */
+    color: #fff; /* Change the color of the message */
+}
+
+/* Customize the progress bar */
+.toast-progress-bar {
+    background: rgb(255, 132, 0); /* Change the color of the progress bar */
+}
+
+
+
 .mx-auto {
     margin-left: auto;
     margin-right: auto;

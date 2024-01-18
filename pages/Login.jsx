@@ -1,18 +1,46 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
     const [staffID, setstaffID] = useState("");
     const [attempt, setAttempt] = useState(0);
+    const [isTimeout, setIsTimeout] = useState(false);
     const navigate = useNavigate();
+
+    const showToastWithMessage = (message) => {
+        toast(message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            className: "toast-message",
+            progressClassName: "toast-progress-bar",
+        });
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
         // Check if staffID is empty
         if (staffID === "") {
-            alert("TYPE SOMETHING NIGGA");
+            setAttempt(attempt + 1);
+            if (attempt === 0) {
+                showToastWithMessage("Really");
+            } else if (attempt === 1) {
+                showToastWithMessage("Don't make me do this");
+            } else if (attempt >= 2) {
+                setIsTimeout(true);
+                showToastWithMessage("GYAT TIME OUT NIGGA!");
+                setTimeout(() => {
+                    setIsTimeout(false);
+                    setAttempt(0); // Reset the attempt count after the timeout
+                }, 10000);
+            }
             return;
         }
 
@@ -43,16 +71,21 @@ const Login = () => {
             } else {
                 setAttempt(attempt + 1);
                 if (attempt === 0) {
-                    alert("Really");
+                    showToastWithMessage("Really");
                 } else if (attempt === 1) {
-                    alert("Can't even remember your id? WOAH!");
+                    showToastWithMessage("Don't make me do this");
                 } else if (attempt >= 2) {
-                    alert("GYAT OUT NIGGA");
+                    setIsTimeout(true);
+                    showToastWithMessage("GYAT TIME OUT NIGGA!");
+                    setTimeout(() => {
+                        setIsTimeout(false);
+                        setAttempt(0); // Reset the attempt count after the timeout
+                    }, 10000);
                 }
             }
         } catch (err) {
             console.error(err);
-            alert("Error logging in");
+            showToastWithMessage("Error logging in");
         }
     };
 
@@ -70,6 +103,7 @@ const Login = () => {
             className="d-flex justify-content-center align-items-center"
             style={{ minHeight: "100vh" }}
         >
+            <ToastContainer />
             <div className="w-100" style={{ maxWidth: "400px" }}>
                 <h1 className="text-center mb-4">Brodium Restaurant</h1>
                 <Form onSubmit={handleLogin}>
@@ -81,7 +115,12 @@ const Login = () => {
                             onChange={handleInputChange}
                         />
                     </Form.Group>
-                    <Button className="w-100 mt-3" type="submit">
+                    <Button
+                        variant="dark"
+                        className="w-100 mt-3"
+                        type="submit"
+                        disabled={isTimeout}
+                    >
                         Login
                     </Button>
                 </Form>
