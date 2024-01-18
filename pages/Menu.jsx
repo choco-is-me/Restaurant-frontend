@@ -12,7 +12,7 @@ const Menu = () => {
     const handleShow = () => setShow(true);
 
     useEffect(() => {
-        fetch("http://localhost:8000/display_menu", {
+        fetch("http://10.100.11.206:8000/display_menu", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -21,7 +21,7 @@ const Menu = () => {
             .then((response) => response.json())
             .then((data) => setMenuItems(data));
 
-        fetch("http://localhost:8000/display_ingredients", {
+        fetch("http://10.100.11.206:8000/display_ingredients", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -140,7 +140,7 @@ const Menu = () => {
         }));
 
         const response = await fetch(
-            "http://localhost:8000/add_item_to_order",
+            "http://10.100.11.206:8000/add_item_to_order",
             {
                 method: "POST",
                 headers: {

@@ -13,14 +13,14 @@ const ManageStaff = () => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8000/staff_list")
+            .get("http://10.100.11.206:8000/staff_list")
             .then((response) => setStaffList(response.data))
             .catch((error) => console.error(`Error: ${error}`));
     }, []);
 
     const handleAddStaff = () => {
         axios
-            .post("http://localhost:8000/signup", {
+            .post("http://10.100.11.206:8000/signup", {
                 name,
                 role,
                 shift,
@@ -37,7 +37,7 @@ const ManageStaff = () => {
     const handleEditStaff = () => {
         const staff = staffList.find((s) => s.staffId === selectedStaff);
         axios
-            .post("http://localhost:8000/edit_staff", {
+            .post("http://10.100.11.206:8000/edit_staff", {
                 staffID: selectedStaff,
                 newName: name || staff.name,
                 newRole: role || staff.role,
@@ -54,7 +54,9 @@ const ManageStaff = () => {
 
     const handleRemoveStaff = (staffId) => {
         axios
-            .post("http://localhost:8000/remove_staff", { staffID: staffId })
+            .post("http://10.100.11.206:8000/remove_staff", {
+                staffID: staffId,
+            })
             .then((response) => {
                 if (response.data.status === "success") {
                     window.location.reload();

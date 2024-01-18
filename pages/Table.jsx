@@ -10,7 +10,7 @@ const Table = () => {
     );
 
     useEffect(() => {
-        fetch("http://localhost:8000/display_tables")
+        fetch("http://10.100.11.206:8000/display_tables")
             .then((response) => response.json())
             .then((data) => {
                 // Sort tables in ascending order based on table number
@@ -23,7 +23,7 @@ const Table = () => {
     const handleMakeTable = (tableNo, e) => {
         e.preventDefault();
         const guestName = e.target.elements.guestName.value;
-        fetch("http://localhost:8000/make_table", {
+        fetch("http://10.100.11.206:8000/make_table", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tableNo, guestName }),
@@ -39,7 +39,7 @@ const Table = () => {
 
     const handleRemoveTable = (tableNo, e) => {
         e.preventDefault();
-        fetch("http://localhost:8000/remove_table", {
+        fetch("http://10.100.11.206:8000/remove_table", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ tableNo }),
@@ -101,7 +101,7 @@ const Table = () => {
                                         style={{
                                             backgroundColor:
                                                 table.tableNo === selectedTable
-                                                    ? "cyan"
+                                                    ? "#ffbf80"
                                                     : "transparent",
                                             cursor: "pointer",
                                         }}
