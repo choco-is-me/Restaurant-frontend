@@ -13,23 +13,11 @@ const Menu = () => {
 
     const fetchData = async () => {
         try {
-            const menuResponse = await fetch("http://192.168.0.163:8000/display_menu", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const menuData = await menuResponse.json();
-            setMenuItems(menuData);
+            const menuResponse = await axios.get("http://192.168.0.163:8000/display_menu");
+            setMenuItems(menuResponse.data);
     
-            const ingredientsResponse = await fetch("http://192.168.0.163:8000/display_ingredients", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const ingredientsData = await ingredientsResponse.json();
-            setIngredients(ingredientsData);
+            const ingredientsResponse = await axios.get("http://192.168.0.163:8000/display_ingredients");
+            setIngredients(ingredientsResponse.data);
     
             const existingOrder = JSON.parse(localStorage.getItem("order"));
             if (existingOrder && existingOrder.items) {
@@ -137,7 +125,7 @@ const Menu = () => {
 
     const handleConfirm = async () => {
         const order = JSON.parse(localStorage.getItem("order"));
-
+    
         // Convert the order to the required format
         const requestBody = order.items.map((item) => ({
             orderId: order.orderId,
@@ -146,23 +134,19 @@ const Menu = () => {
             staffId: order.staffId,
             tableNo: order.tableNo,
         }));
-
-        const response = await fetch(
-            "http://192.168.0.163:8000/add_item_to_order",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestBody),
+    
+        try {
+            const response = await axios.post(
+                "http://192.168.0.163:8000/add_item_to_order",
+                requestBody
+            );
+    
+            if (response.status === 200) {
+                // Clear the order from local storage and reload the page
+                localStorage.removeItem("order");
+                window.location.reload();
             }
-        );
-
-        if (response.ok) {
-            // Clear the order from local storage and reload the page
-            localStorage.removeItem("order");
-            window.location.reload();
-        } else {
+        } catch (error) {
             // Handle error
             console.error("Failed to add items to order");
         }

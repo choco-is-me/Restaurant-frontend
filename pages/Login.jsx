@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 const Login = () => {
     const [staffID, setstaffID] = useState("");
@@ -46,16 +47,10 @@ const Login = () => {
 
         // Send POST request to backend with staffID to get the role
         try {
-            const response = await fetch("http://192.168.0.163:8000/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ staffID }),
-            });
-
-            const data = await response.json();
-
+            const response = await axios.post("login", { staffID });
+        
+            const data = response.data;
+        
             if (data.status === "success") {
                 localStorage.setItem("role", data.role);
                 localStorage.setItem("staffID", staffID);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import axios from "axios";
 
 const Table = () => {
     const [tables, setTables] = useState([]);
@@ -8,12 +9,12 @@ const Table = () => {
     );
 
     const fetchData = () => {
-        fetch("http://192.168.0.163:8000/display_tables")
-            .then((response) => response.json())
-            .then((data) => {
+        axios
+            .get("display_tables")
+            .then((response) => {
                 // Sort tables in ascending order based on table number
-                data.sort((a, b) => a.tableNo - b.tableNo);
-                setTables(data);
+                response.data.sort((a, b) => a.tableNo - b.tableNo);
+                setTables(response.data);
             })
             .catch((error) => console.error(error));
     };
@@ -25,25 +26,19 @@ const Table = () => {
     const handleMakeTable = (tableNo, e) => {
         e.preventDefault();
         const guestName = e.target.elements.guestName.value;
-        fetch("http://192.168.0.163:8000/make_table", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ tableNo, guestName }),
-        })
-            .then((response) => response.json())
+        axios
+            .post("make_table", { tableNo, guestName })
+            .then((response) => response.data)
+            .then(fetchData)
             .catch((error) => console.error(error));
     };
 
     const handleRemoveTable = (tableNo, e) => {
         e.preventDefault();
-        fetch("http://192.168.0.163:8000/remove_table", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ tableNo }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.status === "success") {
+        axios
+            .post("remove_table", { tableNo })
+            .then((response) => {
+                if (response.data.status === "success") {
                     // Check if the removed table is the selected table
                     if (tableNo === selectedTable) {
                         // Update local storage and state variable
@@ -52,6 +47,7 @@ const Table = () => {
                     }
                 }
             })
+            .then(fetchData)
             .catch((error) => console.error(error));
     };
 
@@ -78,7 +74,6 @@ const Table = () => {
                                     variant="danger"
                                     className="button-remove-table"
                                     onClick={(e) =>{
-                                        fetchData();
                                         handleRemoveTable(table.tableNo, e);
                                     }}
                                 >
@@ -91,7 +86,6 @@ const Table = () => {
                                         type="text"
                                         value={`${table.tableNo}: ${table.guestName}`}
                                         onClick={() =>{
-                                            fetchData();
                                             handleSelectTable(table.tableNo);
                                         }}
                                         readOnly
@@ -108,7 +102,6 @@ const Table = () => {
                                     <Form
                                         inline="true"
                                         onSubmit={(e) =>{
-                                            fetchData();
                                             handleMakeTable(table.tableNo, e)
                                         }}
                                         className="table-form"
@@ -124,9 +117,6 @@ const Table = () => {
                                             variant="primary"
                                             className="button-add-table"
                                             type="submit"
-                                            onClick={() =>{
-                                                fetchData();
-                                            }}
                                         >
                                             +
                                         </Button>

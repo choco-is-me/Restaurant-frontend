@@ -3,6 +3,9 @@ import axios from "axios";
 import { Container, Table, Form, Button } from "react-bootstrap";
 
 const ManageStaff = () => {
+    const api = axios.create({
+        baseURL: process.env.REACT_APP_API_URL
+    });
     const [staffList, setStaffList] = useState([]);
     const [isClicked, setIsClicked] = useState(false);
     const [selectedStaff, setSelectedStaff] = useState(null);
@@ -11,57 +14,53 @@ const ManageStaff = () => {
     const [shift, setShift] = useState("");
     const [specialty, setSpecialty] = useState("");
 
-    useEffect(() => {
+    const fetchData = () => {
         axios
-            .get("http://192.168.0.163:8000/staff_list")
+            .get("staff_list")
             .then((response) => setStaffList(response.data))
             .catch((error) => console.error(`Error: ${error}`));
+    };
+
+    useEffect(() => {
+        fetchData();
     }, []);
 
     const handleAddStaff = () => {
         axios
-            .post("http://192.168.0.163:8000/signup", {
+            .post("signup", {
                 name,
                 role,
                 shift,
                 specialty,
             })
-            .then((response) => {
-                if (response.data.status === "success") {
-                    window.location.reload();
-                }
-            })
+            .then(fetchData)
             .catch((error) => console.error(`Error: ${error}`));
     };
 
     const handleEditStaff = () => {
         const staff = staffList.find((s) => s.staffId === selectedStaff);
         axios
-            .post("http://192.168.0.163:8000/edit_staff", {
+            .post("edit_staff", {
                 staffID: selectedStaff,
                 newName: name || staff.name,
                 newRole: role || staff.role,
                 newShift: shift || staff.shift,
                 newSpecialty: specialty || staff.specialty,
             })
-            .then((response) => {
-                if (response.data.status === "success") {
-                    window.location.reload();
-                }
+            .then(() => {
+                fetchData();
+                setSelectedStaff(null); // Reset the selected staff
             })
             .catch((error) => console.error(`Error: ${error}`));
     };
+    
 
     const handleRemoveStaff = (staffId) => {
         axios
-            .post("http://192.168.0.163:8000/remove_staff", {
+            .post("remove_staff", {
                 staffID: staffId,
             })
-            .then((response) => {
-                if (response.data.status === "success") {
-                    window.location.reload();
-                }
-            })
+            .then(fetchData)
             .catch((error) => console.error(`Error: ${error}`));
     };
 
@@ -112,9 +111,9 @@ const ManageStaff = () => {
                                 {selectedStaff === staff.staffId && (
                                     <Button
                                         variant="danger"
-                                        onClick={() =>
+                                        onClick={() =>{
                                             handleRemoveStaff(staff.staffId)
-                                        }
+                                        }}
                                     >
                                         Remove
                                     </Button>
@@ -162,11 +161,17 @@ const ManageStaff = () => {
                 </Form.Group>
 
                 {selectedStaff ? (
-                    <Button variant="primary" onClick={handleEditStaff}>
+                    <Button variant="primary" 
+                            onClick={() =>{
+                                handleEditStaff();
+                            }}>
                         Edit
                     </Button>
                 ) : (
-                    <Button variant="primary" onClick={handleAddStaff}>
+                    <Button variant="primary" 
+                            onClick={() =>{
+                                handleAddStaff();
+                            }}>
                         Add
                     </Button>
                 )}

@@ -17,8 +17,11 @@ import Record from "./pages/Record";
 import Reset from "./pages/Reset";
 import ManageStaff from "./pages/ManageStaff";
 import Logout from "./pages/Logout";
+import Axios from "axios";
 
 const App = () => {
+    Axios.defaults.baseURL = "http://192.168.0.163:8000/";
+
     if (typeof role === "undefined" && localStorage.getItem("role") === null) {
         localStorage.setItem("role", "guest");
     }
