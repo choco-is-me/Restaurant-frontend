@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Card, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 const Menu = () => {
     const [selectedItems, setSelectedItems] = useState([]);
@@ -13,10 +14,10 @@ const Menu = () => {
 
     const fetchData = async () => {
         try {
-            const menuResponse = await axios.get("http://192.168.0.163:8000/display_menu");
+            const menuResponse = await axios.get("display_menu");
             setMenuItems(menuResponse.data);
     
-            const ingredientsResponse = await axios.get("http://192.168.0.163:8000/display_ingredients");
+            const ingredientsResponse = await axios.get("display_ingredients");
             setIngredients(ingredientsResponse.data);
     
             const existingOrder = JSON.parse(localStorage.getItem("order"));
@@ -116,6 +117,7 @@ const Menu = () => {
         }
         setCart(order.items);
         setSelectedItems(order.items.map((i) => i.itemId));
+        fetchData();
     };
 
     const totalPrice = cart.reduce(
@@ -137,19 +139,19 @@ const Menu = () => {
     
         try {
             const response = await axios.post(
-                "http://192.168.0.163:8000/add_item_to_order",
+                "add_item_to_order",
                 requestBody
             );
     
             if (response.status === 200) {
                 // Clear the order from local storage and reload the page
                 localStorage.removeItem("order");
-                window.location.reload();
             }
         } catch (error) {
             // Handle error
             console.error("Failed to add items to order");
         }
+        fetchData();
     };
 
     return (
@@ -159,7 +161,6 @@ const Menu = () => {
                 variant="dark"
                 onClick={() => {
                     handleShow();
-                    fetchData();
                 }}
                 style={{ position: "fixed", top: 20, right: 30 }}
             > Cart ({cart.length})
@@ -202,13 +203,11 @@ const Menu = () => {
                     <Button variant="secondary" 
                             onClick={() => {
                                 handleClose();
-                                fetchData();
                             }}>Close
                     </Button>
                     <Button variant="primary" 
                             onClick={() => {
                                 handleConfirm();
-                                fetchData();
                             }}>Confirm
                     </Button>
                 </Modal.Footer>
@@ -247,7 +246,6 @@ const Menu = () => {
                                     variant="dark"
                                     onClick={() => {
                                         addToCart(item);
-                                        fetchData();
                                     }}
                                 >+
                                 </Button>

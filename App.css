@@ -1,5 +1,7 @@
 .navbar-custom {
-    width: 7%;
+    display: flex;
+    width: 7.5rem;
+    height: 100%;
 }
 
 .full-height {
@@ -30,8 +32,6 @@ body {
     background: rgb(255, 132, 0); /* Change the color of the progress bar */
 }
 
-
-
 .mx-auto {
     margin-left: auto;
     margin-right: auto;
@@ -46,53 +46,6 @@ body {
     margin-bottom: auto;
     margin-right: auto;
     margin-left: auto;
-}
-
-.table-row {
-    justify-content: center;
-    margin-top: 2rem;
-}
-
-.table-form {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: auto;
-}
-
-.table-input {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    width: auto;
-    border: 1px solid #000000;
-    padding: .375rem .75rem;
-    border-radius: .25rem;
-}
-
-
-.button-remove-table {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.button-add-table {
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.mr-2 {
-    display: flex;
-    text-align: center;
-    width: auto;
-}
-
-.custom-container {
-    height: 100vh;
-    justify-content: center;
 }
 
 .staff-table {

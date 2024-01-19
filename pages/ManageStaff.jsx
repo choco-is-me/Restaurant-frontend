@@ -3,9 +3,6 @@ import axios from "axios";
 import { Container, Table, Form, Button } from "react-bootstrap";
 
 const ManageStaff = () => {
-    const api = axios.create({
-        baseURL: process.env.REACT_APP_API_URL
-    });
     const [staffList, setStaffList] = useState([]);
     const [isClicked, setIsClicked] = useState(false);
     const [selectedStaff, setSelectedStaff] = useState(null);

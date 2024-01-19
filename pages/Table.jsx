@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Table as BootstrapTable, Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
 
 const Table = () => {
@@ -64,69 +64,49 @@ const Table = () => {
     };
 
     return (
-        <Container className="table-container">
-            <Row className="table-row">
-                {tables.map((table, index) => (
-                    <Col md={4} sm={6} xs={12} key={index} className="mb-4">
-                        <Row>
-                            <Col xs={2}>
-                                <Button
-                                    variant="danger"
-                                    className="button-remove-table"
-                                    onClick={(e) =>{
-                                        handleRemoveTable(table.tableNo, e);
-                                    }}
-                                >
-                                    x
+        <Container className="d-flex justify-content-center table-container">
+        <BootstrapTable striped bordered hover>
+            <thead>
+                <tr>
+                    <th>TableNo</th>
+                    <th>Guest</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {tables.map((table) => (
+                    <tr
+                        key={table.tableNo}
+                        onDoubleClick={() => table.guestName && handleSelectTable(table.tableNo)}
+                        style={{
+                            backgroundColor:
+                                table.tableNo === selectedTable
+                                    ? "#ffbf80"
+                                    : "transparent",
+                            cursor: "pointer",
+                        }}
+                    >
+                        <td>{table.tableNo}</td>
+                        <td>
+                            {table.guestName ? (
+                                table.guestName
+                            ) : (
+                                <Form onSubmit={(e) => handleMakeTable(table.tableNo, e)}>
+                                    <Form.Control name="guestName" type="text" placeholder="Enter guest name" required />
+                                </Form>
+                            )}
+                        </td>
+                        <td>
+                            {table.tableNo === selectedTable && (
+                                <Button variant="danger" onClick={(e) => handleRemoveTable(table.tableNo, e)}>
+                                    Remove
                                 </Button>
-                            </Col>
-                            <Col xs={10}>
-                                {table.guestName ? (
-                                    <input
-                                        type="text"
-                                        value={`${table.tableNo}: ${table.guestName}`}
-                                        onClick={() =>{
-                                            handleSelectTable(table.tableNo);
-                                        }}
-                                        readOnly
-                                        className="table-input"
-                                        style={{
-                                            backgroundColor:
-                                                table.tableNo === selectedTable
-                                                    ? "#ffbf80"
-                                                    : "transparent",
-                                            cursor: "pointer",
-                                        }}
-                                    />
-                                ) : (
-                                    <Form
-                                        inline="true"
-                                        onSubmit={(e) =>{
-                                            handleMakeTable(table.tableNo, e)
-                                        }}
-                                        className="table-form"
-                                    >
-                                        <Form.Control
-                                            type="text"
-                                            name="guestName"
-                                            placeholder={`${table.tableNo}: Guest Name`}
-                                            required
-                                            className="mr-2"
-                                        />
-                                        <Button
-                                            variant="primary"
-                                            className="button-add-table"
-                                            type="submit"
-                                        >
-                                            +
-                                        </Button>
-                                    </Form>
-                                )}
-                            </Col>
-                        </Row>
-                    </Col>
+                            )}
+                        </td>
+                    </tr>
                 ))}
-            </Row>
+            </tbody>
+        </BootstrapTable>
         </Container>
     );
 };
