@@ -11,34 +11,42 @@ const Menu = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    useEffect(() => {
-        fetch("http://192.168.0.163:8000/display_menu", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => setMenuItems(data));
-
-        fetch("http://192.168.0.163:8000/display_ingredients", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => setIngredients(data));
-
-        const existingOrder = JSON.parse(localStorage.getItem("order"));
-        if (existingOrder && existingOrder.items) {
-            setSelectedItems(existingOrder.items.map((i) => i.itemId));
-            setCart(existingOrder.items);
-        } else {
-            setSelectedItems([]);
+    const fetchData = async () => {
+        try {
+            const menuResponse = await fetch("http://192.168.0.163:8000/display_menu", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const menuData = await menuResponse.json();
+            setMenuItems(menuData);
+    
+            const ingredientsResponse = await fetch("http://192.168.0.163:8000/display_ingredients", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const ingredientsData = await ingredientsResponse.json();
+            setIngredients(ingredientsData);
+    
+            const existingOrder = JSON.parse(localStorage.getItem("order"));
+            if (existingOrder && existingOrder.items) {
+                setSelectedItems(existingOrder.items.map((i) => i.itemId));
+                setCart(existingOrder.items);
+            } else {
+                setSelectedItems([]);
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
-    }, [menuItems, ingredients]);
+    };
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+    
     const showToastWithMessage = (message) => {
         toast(message, {
             position: "top-center",
@@ -165,11 +173,14 @@ const Menu = () => {
             <ToastContainer />
             <Button
                 variant="dark"
-                onClick={handleShow}
+                onClick={() => {
+                    handleShow();
+                    fetchData();
+                }}
                 style={{ position: "fixed", top: 20, right: 30 }}
-            >
-                Cart ({cart.length})
+            > Cart ({cart.length})
             </Button>
+
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -204,11 +215,17 @@ const Menu = () => {
                     <div style={{ flexGrow: 1, textAlign: "left" }}>
                         <p>Total Price: {totalPrice}</p>
                     </div>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
+                    <Button variant="secondary" 
+                            onClick={() => {
+                                handleClose();
+                                fetchData();
+                            }}>Close
                     </Button>
-                    <Button variant="primary" onClick={handleConfirm}>
-                        Confirm
+                    <Button variant="primary" 
+                            onClick={() => {
+                                handleConfirm();
+                                fetchData();
+                            }}>Confirm
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -244,9 +261,11 @@ const Menu = () => {
                                 <Card.Text>{item.price}</Card.Text>
                                 <Button
                                     variant="dark"
-                                    onClick={() => addToCart(item)}
-                                >
-                                    +
+                                    onClick={() => {
+                                        addToCart(item);
+                                        fetchData();
+                                    }}
+                                >+
                                 </Button>
                             </Card.Body>
                         </Card>

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
 const Table = () => {
     const [tables, setTables] = useState([]);
-    const navigate = useNavigate();
     const [selectedTable, setSelectedTable] = useState(
         localStorage.getItem("selectedTable") || null
     );
 
-    useEffect(() => {
+    const fetchData = () => {
         fetch("http://192.168.0.163:8000/display_tables")
             .then((response) => response.json())
             .then((data) => {
@@ -18,6 +16,10 @@ const Table = () => {
                 setTables(data);
             })
             .catch((error) => console.error(error));
+    };
+
+    useEffect(() => {
+        fetchData();
     }, []);
 
     const handleMakeTable = (tableNo, e) => {
@@ -29,11 +31,6 @@ const Table = () => {
             body: JSON.stringify({ tableNo, guestName }),
         })
             .then((response) => response.json())
-            .then((data) => {
-                if (data.status === "success") {
-                    window.location.reload();
-                }
-            })
             .catch((error) => console.error(error));
     };
 
@@ -53,7 +50,6 @@ const Table = () => {
                         localStorage.removeItem("selectedTable");
                         setSelectedTable(null);
                     }
-                    window.location.reload();
                 }
             })
             .catch((error) => console.error(error));
@@ -81,9 +77,10 @@ const Table = () => {
                                 <Button
                                     variant="danger"
                                     className="button-remove-table"
-                                    onClick={(e) =>
-                                        handleRemoveTable(table.tableNo, e)
-                                    }
+                                    onClick={(e) =>{
+                                        fetchData();
+                                        handleRemoveTable(table.tableNo, e);
+                                    }}
                                 >
                                     x
                                 </Button>
@@ -93,9 +90,10 @@ const Table = () => {
                                     <input
                                         type="text"
                                         value={`${table.tableNo}: ${table.guestName}`}
-                                        onClick={() =>
-                                            handleSelectTable(table.tableNo)
-                                        }
+                                        onClick={() =>{
+                                            fetchData();
+                                            handleSelectTable(table.tableNo);
+                                        }}
                                         readOnly
                                         className="table-input"
                                         style={{
@@ -109,9 +107,10 @@ const Table = () => {
                                 ) : (
                                     <Form
                                         inline="true"
-                                        onSubmit={(e) =>
+                                        onSubmit={(e) =>{
+                                            fetchData();
                                             handleMakeTable(table.tableNo, e)
-                                        }
+                                        }}
                                         className="table-form"
                                     >
                                         <Form.Control
@@ -125,6 +124,9 @@ const Table = () => {
                                             variant="primary"
                                             className="button-add-table"
                                             type="submit"
+                                            onClick={() =>{
+                                                fetchData();
+                                            }}
                                         >
                                             +
                                         </Button>
