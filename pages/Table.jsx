@@ -8,7 +8,7 @@ const Table = () => {
         localStorage.getItem("selectedTable") || null
     );
 
-    const fetchData = () => {
+    const fetchData = (tableNo) => {
         axios
             .get("display_tables")
             .then((response) => {
@@ -61,6 +61,8 @@ const Table = () => {
             localStorage.setItem("selectedTable", tableNo);
             setSelectedTable(tableNo);
         }
+        console.log(selectedTable);
+        console.log(tableNo)
     };
 
     return (
@@ -78,18 +80,14 @@ const Table = () => {
                     <tr
                         key={table.tableNo}
                         onDoubleClick={() => table.guestName && handleSelectTable(table.tableNo)}
-                        style={{
-                            backgroundColor:
-                                table.tableNo === selectedTable
-                                    ? "#ffbf80"
-                                    : "transparent",
-                            cursor: "pointer",
-                        }}
                     >
                         <td>{table.tableNo}</td>
                         <td>
                             {table.guestName ? (
-                                table.guestName
+                                <>
+                                    {table.tableNo === selectedTable && '⭐'}
+                                    {table.guestName}
+                                </>
                             ) : (
                                 <Form onSubmit={(e) => handleMakeTable(table.tableNo, e)}>
                                     <Form.Control name="guestName" type="text" placeholder="Enter guest name" required />

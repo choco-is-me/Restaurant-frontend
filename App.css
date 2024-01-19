@@ -61,6 +61,10 @@ body {
     width: auto;
 }
 
+.table-row {
+    color: #ffd900;
+}
+
 .menu-form{
     margin-top: auto;
     margin-bottom: auto;
