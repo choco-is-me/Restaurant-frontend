@@ -46,7 +46,7 @@ const Login = () => {
 
         // Send POST request to backend with staffID to get the role
         try {
-            const response = await fetch("http://10.100.11.206:8000/login", {
+            const response = await fetch("http://192.168.0.163:8000/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
