@@ -31,12 +31,12 @@ const Login = () => {
         if (staffID === "") {
             setAttempt(attempt + 1);
             if (attempt === 0) {
-                showToastWithMessage("Really");
+                showToastWithMessage("Please enter you staff ID again");
             } else if (attempt === 1) {
-                showToastWithMessage("Don't make me do this");
+                showToastWithMessage("Please enter you staff ID again");
             } else if (attempt >= 2) {
                 setIsTimeout(true);
-                showToastWithMessage("GYAT TIME OUT NIGGA!");
+                showToastWithMessage("Too many attempts, please try again later");
                 setTimeout(() => {
                     setIsTimeout(false);
                     setAttempt(0); // Reset the attempt count after the timeout
@@ -66,12 +66,12 @@ const Login = () => {
             } else {
                 setAttempt(attempt + 1);
                 if (attempt === 0) {
-                    showToastWithMessage("Really");
+                    showToastWithMessage("Please enter you staff ID again");
                 } else if (attempt === 1) {
-                    showToastWithMessage("Don't make me do this");
+                    showToastWithMessage("Please enter you staff ID again");
                 } else if (attempt >= 2) {
                     setIsTimeout(true);
-                    showToastWithMessage("GYAT TIME OUT NIGGA!");
+                    showToastWithMessage("Too many attempts, please try again later");
                     setTimeout(() => {
                         setIsTimeout(false);
                         setAttempt(0); // Reset the attempt count after the timeout
