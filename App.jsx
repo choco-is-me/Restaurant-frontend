@@ -22,7 +22,8 @@ import Axios from "axios";
 const App = () => {
     Axios.defaults.baseURL = "http://192.168.0.163:8000/";
 
-    if (typeof role === "undefined" && localStorage.getItem("role") === null) {
+    let role = localStorage.getItem("role");
+    if (typeof role === "undefined" || role === null) {
         localStorage.setItem("role", "guest");
     }
 
