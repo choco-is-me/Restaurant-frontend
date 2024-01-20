@@ -67,7 +67,7 @@ const Table = () => {
 
     return (
         <Container className="d-flex justify-content-center table-container">
-        <BootstrapTable striped bordered hover>
+        <BootstrapTable striped bordered hover variant="dark">
             <thead>
                 <tr>
                     <th>TableNo</th>

@@ -63,7 +63,7 @@ const ManageStaff = () => {
 
     return (
         <Container className="d-flex justify-content-center table-container">
-            <Table striped bordered hover className="staff-table">
+            <Table striped bordered hover className="staff-table" variant="dark">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -158,14 +158,14 @@ const ManageStaff = () => {
                 </Form.Group>
 
                 {selectedStaff ? (
-                    <Button variant="primary" 
+                    <Button variant="dark" 
                             onClick={() =>{
                                 handleEditStaff();
                             }}>
                         Edit
                     </Button>
                 ) : (
-                    <Button variant="primary" 
+                    <Button variant="dark" 
                             onClick={() =>{
                                 handleAddStaff();
                             }}>

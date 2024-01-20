@@ -1,13 +1,17 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import NavbarComponentWaiter from "../components/NavbarWaiter";
 
 const WaiterLayout = () => {
     const [role] = useState(localStorage.getItem("role") || "waiter");
+
     if (role === "waiter") {
         return (
             <>
+                <Helmet>
+                    <title>Waiter</title>
+                </Helmet>
                 <NavbarComponentWaiter />
                 <Outlet />
             </>

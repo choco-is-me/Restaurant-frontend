@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import NavbarComponentManager from "../components/NavbarManager";
 
 const ManagerLayout = () => {
@@ -8,6 +9,9 @@ const ManagerLayout = () => {
     if (role === "manager") {
         return (
             <>
+                <Helmet>
+                    <title>Manager</title>
+                </Helmet>
                 <NavbarComponentManager />
                 <Outlet />
             </>
