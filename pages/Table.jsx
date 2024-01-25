@@ -85,7 +85,7 @@ const Table = () => {
             <div
                 style={{
                     position: "absolute",
-                    top: "20%",
+                    top: "7%",
                     left: "40%",
                     transform: "translateY(-50%)",
                     display: "flex",

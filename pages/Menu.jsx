@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Card, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
-import shortUUID from "short-uuid";
 import axios from "axios";
 
 const Menu = () => {
@@ -225,16 +224,16 @@ const Menu = () => {
     };
 
     return (
-        <Container style={{ paddingTop: "50px", marginTop: "50rem" }}>
+        <Container className="menu" style={{ paddingTop: "50px", marginTop: "50rem" }}>
             <ToastContainer />
             <Button
+                className="cart-button"
                 variant="dark"
                 onClick={() => {
                     handleShow();
                 }}
                 style={{ position: "fixed", top: 20, right: 30 }}
             >
-                {" "}
                 Cart ({cart.length})
             </Button>
 
