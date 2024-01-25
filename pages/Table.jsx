@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Table as BootstrapTable, Form, Button, Container } from "react-bootstrap";
+import {
+    Table as BootstrapTable,
+    Form,
+    Button,
+    Container,
+} from "react-bootstrap";
 import axios from "axios";
 
 const Table = () => {
     const [tables, setTables] = useState([]);
     const [selectedTable, setSelectedTable] = useState(
         localStorage.getItem("selectedTable") || null
+    );
+    const [selectedGuest, setSelectedGuest] = useState(
+        localStorage.getItem("selectedGuest") || null
     );
 
     const fetchData = (tableNo) => {
@@ -20,6 +28,11 @@ const Table = () => {
     };
 
     useEffect(() => {
+        // Update selectedTable and selectedGuest from local storage
+        const storedTable = localStorage.getItem("selectedTable");
+        const storedGuest = localStorage.getItem("selectedGuest");
+        setSelectedTable(storedTable);
+        setSelectedGuest(storedGuest);
         fetchData();
     }, []);
 
@@ -51,61 +64,103 @@ const Table = () => {
             .catch((error) => console.error(error));
     };
 
-    const handleSelectTable = (tableNo) => {
+    const handleSelectTable = (tableNo, guestName) => {
         if (tableNo === selectedTable) {
             // If the table is already selected, deselect it
             localStorage.removeItem("selectedTable");
+            localStorage.removeItem("selectedGuest");
             setSelectedTable(null);
+            setSelectedGuest(null);
         } else {
             // Otherwise, select the table
             localStorage.setItem("selectedTable", tableNo);
+            localStorage.setItem("selectedGuest", guestName);
             setSelectedTable(tableNo);
+            setSelectedGuest(guestName);
         }
-        console.log(selectedTable);
-        console.log(tableNo)
     };
 
     return (
-        <Container className="d-flex justify-content-center table-container">
-        <BootstrapTable striped bordered hover variant="dark">
-            <thead>
-                <tr>
-                    <th>TableNo</th>
-                    <th>Guest</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {tables.map((table) => (
-                    <tr
-                        key={table.tableNo}
-                        onDoubleClick={() => table.guestName && handleSelectTable(table.tableNo)}
-                    >
-                        <td>{table.tableNo}</td>
-                        <td>
-                            {table.guestName ? (
-                                <>
-                                    {table.tableNo === selectedTable && '⭐'}
-                                    {table.guestName}
-                                </>
-                            ) : (
-                                <Form onSubmit={(e) => handleMakeTable(table.tableNo, e)}>
-                                    <Form.Control name="guestName" type="text" placeholder="Enter guest name" required />
-                                </Form>
-                            )}
-                        </td>
-                        <td>
-                            {table.tableNo === selectedTable && (
-                                <Button variant="danger" onClick={(e) => handleRemoveTable(table.tableNo, e)}>
-                                    Remove
-                                </Button>
-                            )}
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </BootstrapTable>
-        </Container>
+        <>
+            <div
+                style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "40%",
+                    transform: "translateY(-50%)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                <h2>
+                    Selected Table: {selectedTable} Guest: {selectedGuest}
+                </h2>
+            </div>
+            <Container className="table-container">
+                <BootstrapTable striped bordered hover variant="dark">
+                    <thead>
+                        <tr>
+                            <th>TableNo</th>
+                            <th>Guest</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tables.map((table) => (
+                            <tr
+                                key={table.tableNo}
+                                onDoubleClick={() =>
+                                    table.guestName &&
+                                    handleSelectTable(
+                                        table.tableNo,
+                                        table.guestName
+                                    )
+                                }
+                            >
+                                <td>{table.tableNo}</td>
+                                <td>
+                                    {table.guestName ? (
+                                        <>{table.guestName}</>
+                                    ) : (
+                                        <Form
+                                            onSubmit={(e) =>
+                                                handleMakeTable(
+                                                    table.tableNo,
+                                                    e
+                                                )
+                                            }
+                                        >
+                                            <Form.Control
+                                                name="guestName"
+                                                type="text"
+                                                placeholder="Enter guest name"
+                                                required
+                                            />
+                                        </Form>
+                                    )}
+                                </td>
+                                <td>
+                                    {table.tableNo === selectedTable && (
+                                        <Button
+                                            variant="danger"
+                                            onClick={(e) =>
+                                                handleRemoveTable(
+                                                    table.tableNo,
+                                                    e
+                                                )
+                                            }
+                                        >
+                                            Remove
+                                        </Button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </BootstrapTable>
+            </Container>
+        </>
     );
 };
 

@@ -36,7 +36,9 @@ const Login = () => {
                 showToastWithMessage("Please enter you staff ID again");
             } else if (attempt >= 2) {
                 setIsTimeout(true);
-                showToastWithMessage("Too many attempts, please try again later");
+                showToastWithMessage(
+                    "Too many attempts, please try again later"
+                );
                 setTimeout(() => {
                     setIsTimeout(false);
                     setAttempt(0); // Reset the attempt count after the timeout
@@ -48,9 +50,9 @@ const Login = () => {
         // Send POST request to backend with staffID to get the role
         try {
             const response = await axios.post("login", { staffID });
-        
+
             const data = response.data;
-        
+
             if (data.status === "success") {
                 localStorage.setItem("role", data.role);
                 localStorage.setItem("staffID", staffID);
@@ -71,7 +73,9 @@ const Login = () => {
                     showToastWithMessage("Please enter you staff ID again");
                 } else if (attempt >= 2) {
                     setIsTimeout(true);
-                    showToastWithMessage("Too many attempts, please try again later");
+                    showToastWithMessage(
+                        "Too many attempts, please try again later"
+                    );
                     setTimeout(() => {
                         setIsTimeout(false);
                         setAttempt(0); // Reset the attempt count after the timeout

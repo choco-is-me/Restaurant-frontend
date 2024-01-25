@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Card, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
+import shortUUID from "short-uuid";
 import axios from "axios";
 
 const Menu = () => {
@@ -16,10 +17,17 @@ const Menu = () => {
         try {
             const menuResponse = await axios.get("display_menu");
             setMenuItems(menuResponse.data);
-    
+
             const ingredientsResponse = await axios.get("display_ingredients");
             setIngredients(ingredientsResponse.data);
-    
+
+            const orderStatusResponse = await axios.get("display_order_status");
+            let maxOrderId = Math.max(
+                ...orderStatusResponse.data.map((order) => order.orderID)
+            );
+            maxOrderId = maxOrderId === -Infinity ? 60 : maxOrderId;
+            localStorage.setItem("maxOrderId", maxOrderId.toString());
+
             const existingOrder = JSON.parse(localStorage.getItem("order"));
             if (existingOrder && existingOrder.items) {
                 setSelectedItems(existingOrder.items.map((i) => i.itemId));
@@ -28,14 +36,14 @@ const Menu = () => {
                 setSelectedItems([]);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error("Error:", error);
         }
     };
 
     useEffect(() => {
         fetchData();
     }, []);
-    
+
     const showToastWithMessage = (message) => {
         toast(message, {
             position: "top-center",
@@ -60,8 +68,16 @@ const Menu = () => {
             return;
         }
 
+        let orderId = localStorage.getItem("maxOrderId");
+        if (orderId === null) {
+            orderId = "60";
+        } else {
+            orderId = (parseInt(orderId, 10) + 1).toString();
+        }
+        localStorage.setItem("maxOrderId", orderId);
+
         const order = existingOrder || {
-            orderId: Date.now(),
+            orderId: parseInt(orderId, 10),
             tableNo: existingTable,
             staffId: existingStaff,
             items: [],
@@ -125,9 +141,66 @@ const Menu = () => {
         0
     );
 
+    const handleQuantityChange = (item, operator) => {
+        // Get the existing order from local storage
+        let order = JSON.parse(localStorage.getItem("order"));
+
+        // Find the index of the item in the order
+        let itemIndex = order.items.findIndex((i) => i.itemId === item.itemId);
+
+        // If the item is not in the order, return
+        if (itemIndex === -1) {
+            return;
+        }
+
+        // Get the current quantity of the item
+        let quantity = order.items[itemIndex].quantity;
+
+        // Change the quantity based on the operator (+ or -)
+        if (operator === "+") {
+            // Check if the new quantity of the item exceeds the ingredient threshold
+            const ingredientsForItem = item.ingredients;
+            const potentialLostOfIngredients = ingredientsForItem.map(
+                (i) => (quantity + 1) * i.ingredientThreshold
+            );
+            const isIngredientSufficient = potentialLostOfIngredients.every(
+                (lost, index) => {
+                    return lost <= ingredientsForItem[index].ingredientAmount;
+                }
+            );
+
+            // If the ingredient threshold is exceeded, show a toast message and return
+            if (!isIngredientSufficient) {
+                showToastWithMessage(
+                    "The ingredients for this item are not enough. Please decrease the quantity."
+                );
+                return;
+            }
+
+            quantity++;
+            fetchData();
+        } else if (operator === "-" && quantity > 1) {
+            quantity--;
+            fetchData();
+        } else if (quantity === 1) {
+            // Remove the item from the order if the quantity is 1 and the user presses "-"
+            order.items.splice(itemIndex, 1);
+            // Save the updated order to local storage
+            localStorage.setItem("order", JSON.stringify(order));
+            fetchData();
+            return; // Return here after removing the item
+        }
+
+        // Update the quantity of the item in the order
+        order.items[itemIndex].quantity = quantity;
+
+        // Save the updated order to local storage
+        localStorage.setItem("order", JSON.stringify(order));
+    };
+
     const handleConfirm = async () => {
         const order = JSON.parse(localStorage.getItem("order"));
-    
+
         // Convert the order to the required format
         const requestBody = order.items.map((item) => ({
             orderId: order.orderId,
@@ -136,22 +209,19 @@ const Menu = () => {
             staffId: order.staffId,
             tableNo: order.tableNo,
         }));
-    
+
         try {
-            const response = await axios.post(
-                "add_item_to_order",
-                requestBody
-            );
-    
-            if (response.status === 200) {
-                // Clear the order from local storage and reload the page
-                localStorage.removeItem("order");
-            }
+            await axios
+                .post("add_item_to_order", requestBody)
+                .then((response) => {
+                    if (response.status === 200) {
+                        localStorage.removeItem("order");
+                        window.location.reload();
+                    }
+                });
         } catch (error) {
-            // Handle error
-            console.error("Failed to add items to order");
+            showToastWithMessage("Failed to add items to order");
         }
-        fetchData();
     };
 
     return (
@@ -163,9 +233,10 @@ const Menu = () => {
                     handleShow();
                 }}
                 style={{ position: "fixed", top: 20, right: 30 }}
-            > Cart ({cart.length})
+            >
+                {" "}
+                Cart ({cart.length})
             </Button>
-
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -184,11 +255,22 @@ const Menu = () => {
                             >
                                 <p style={{ margin: 0 }}>{item.name}</p>
                                 <div>
-                                    <Button>+</Button>
+                                    <Button
+                                        onClick={() =>
+                                            handleQuantityChange(item, "+")
+                                        }
+                                    >
+                                        +
+                                    </Button>
                                     <span style={{ margin: "0 10px" }}>
                                         {item.quantity}
                                     </span>
-                                    <Button disabled={item.quantity <= 0}>
+                                    <Button
+                                        disabled={item.quantity <= 0}
+                                        onClick={() =>
+                                            handleQuantityChange(item, "-")
+                                        }
+                                    >
                                         -
                                     </Button>
                                 </div>
@@ -200,15 +282,21 @@ const Menu = () => {
                     <div style={{ flexGrow: 1, textAlign: "left" }}>
                         <p>Total Price: {totalPrice}</p>
                     </div>
-                    <Button variant="secondary" 
-                            onClick={() => {
-                                handleClose();
-                            }}>Close
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            handleClose();
+                        }}
+                    >
+                        Close
                     </Button>
-                    <Button variant="primary" 
-                            onClick={() => {
-                                handleConfirm();
-                            }}>Confirm
+                    <Button
+                        variant="primary"
+                        onClick={() => {
+                            handleConfirm();
+                        }}
+                    >
+                        Confirm
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -247,7 +335,8 @@ const Menu = () => {
                                     onClick={() => {
                                         addToCart(item);
                                     }}
-                                >+
+                                >
+                                    +
                                 </Button>
                             </Card.Body>
                         </Card>

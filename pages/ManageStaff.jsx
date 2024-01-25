@@ -50,7 +50,6 @@ const ManageStaff = () => {
             })
             .catch((error) => console.error(`Error: ${error}`));
     };
-    
 
     const handleRemoveStaff = (staffId) => {
         axios
@@ -63,7 +62,13 @@ const ManageStaff = () => {
 
     return (
         <Container className="d-flex justify-content-center table-container">
-            <Table striped bordered hover className="staff-table" variant="dark">
+            <Table
+                striped
+                bordered
+                hover
+                className="staff-table"
+                variant="dark"
+            >
                 <thead>
                     <tr>
                         <th>#</th>
@@ -108,8 +113,8 @@ const ManageStaff = () => {
                                 {selectedStaff === staff.staffId && (
                                     <Button
                                         variant="danger"
-                                        onClick={() =>{
-                                            handleRemoveStaff(staff.staffId)
+                                        onClick={() => {
+                                            handleRemoveStaff(staff.staffId);
                                         }}
                                     >
                                         Remove
@@ -158,17 +163,21 @@ const ManageStaff = () => {
                 </Form.Group>
 
                 {selectedStaff ? (
-                    <Button variant="dark" 
-                            onClick={() =>{
-                                handleEditStaff();
-                            }}>
+                    <Button
+                        variant="dark"
+                        onClick={() => {
+                            handleEditStaff();
+                        }}
+                    >
                         Edit
                     </Button>
                 ) : (
-                    <Button variant="dark" 
-                            onClick={() =>{
-                                handleAddStaff();
-                            }}>
+                    <Button
+                        variant="dark"
+                        onClick={() => {
+                            handleAddStaff();
+                        }}
+                    >
                         Add
                     </Button>
                 )}
