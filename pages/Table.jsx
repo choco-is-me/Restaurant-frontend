@@ -16,7 +16,7 @@ const Table = () => {
         localStorage.getItem("selectedGuest") || null
     );
 
-    const fetchData = (tableNo) => {
+    const fetchData = () => {
         axios
             .get("display_tables")
             .then((response) => {
