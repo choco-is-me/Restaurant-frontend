@@ -14,7 +14,6 @@ import Order from "./pages/Order";
 import Payment from "./pages/Payment";
 import Ingredient from "./pages/Ingredient";
 import Record from "./pages/Record";
-import Reset from "./pages/Reset";
 import ManageStaff from "./pages/ManageStaff";
 import Logout from "./pages/Logout";
 import Axios from "axios";
@@ -61,7 +60,6 @@ const App = () => {
                     <Route path="order" element={<Order />} />
                     <Route path="payment" element={<Payment />} />
                     <Route path="record" element={<Record />} />
-                    <Route path="reset" element={<Reset />} />
                     <Route path="logout" element={<Logout />} />
                 </Route>
             </Routes>

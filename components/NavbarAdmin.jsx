@@ -21,7 +21,6 @@ export default function NavbarComponentAdmin() {
                         <Nav.Link href="/admin/order">Order</Nav.Link>
                         <Nav.Link href="/admin/payment">Payment</Nav.Link>
                         <Nav.Link href="/admin/record">Record</Nav.Link>
-                        <Nav.Link href="/admin/reset">Reset</Nav.Link>
                         <Nav.Link href="/admin/logout">Logout</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
