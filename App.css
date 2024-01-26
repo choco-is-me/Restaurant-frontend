@@ -76,7 +76,7 @@ body {
     margin-left: 75rem;
     width: auto;
     z-index: 1;
-    position: relative;
+    position: absolute;
 }
 
 .menu{

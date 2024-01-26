@@ -4,6 +4,20 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
 const Menu = () => {
+    const showToastWithMessage = (message) => {
+        toast(message, {
+            position: "bottom-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            className: "toast-message",
+            progressClassName: "toast-progress-bar",
+            zIndex: 1064,
+        });
+    };
     const [selectedItems, setSelectedItems] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
     const [ingredients, setIngredients] = useState([]);
@@ -35,27 +49,13 @@ const Menu = () => {
                 setSelectedItems([]);
             }
         } catch (error) {
-            console.error("Error:", error);
+            showToastWithMessage("Error:", error);
         }
     };
 
     useEffect(() => {
         fetchData();
     }, []);
-
-    const showToastWithMessage = (message) => {
-        toast(message, {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            className: "toast-message",
-            progressClassName: "toast-progress-bar",
-        });
-    };
 
     const addToCart = (item) => {
         const existingOrder = JSON.parse(localStorage.getItem("order"));
@@ -224,7 +224,10 @@ const Menu = () => {
     };
 
     return (
-        <Container className="menu" style={{ paddingTop: "50px", marginTop: "50rem" }}>
+        <Container
+            className="menu"
+            style={{ paddingTop: "50px", marginTop: "50rem" }}
+        >
             <ToastContainer />
             <Button
                 className="cart-button"
@@ -237,7 +240,16 @@ const Menu = () => {
                 Cart ({cart.length})
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal
+                style={{
+                    zIndex: "1064",
+                    position: "absolute",
+                    backdropFilter: "blur(5px)",
+                }}
+                show={show}
+                onHide={handleClose}
+            >
+                <ToastContainer />
                 <Modal.Header closeButton>
                     <Modal.Title>Your Cart</Modal.Title>
                 </Modal.Header>

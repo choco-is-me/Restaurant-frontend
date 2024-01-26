@@ -17,8 +17,8 @@ export default function NavbarComponentAdmin() {
                         <Nav.Link href="/admin">StaffX</Nav.Link>
                         <Nav.Link href="/admin/table">Table</Nav.Link>
                         <Nav.Link href="/admin/menu">Menu</Nav.Link>
-                        <Nav.Link href="/admin/ingredient">Ingredient</Nav.Link>
                         <Nav.Link href="/admin/order">Order</Nav.Link>
+                        <Nav.Link href="/admin/ingredient">Ingredient</Nav.Link>
                         <Nav.Link href="/admin/payment">Payment</Nav.Link>
                         <Nav.Link href="/admin/record">Record</Nav.Link>
                         <Nav.Link href="/admin/logout">Logout</Nav.Link>
