@@ -61,7 +61,7 @@ const ManageStaff = () => {
     };
 
     return (
-        <Container className="d-flex justify-content-center table-container">
+        <Container className="table-container">
             <Table
                 striped
                 bordered
@@ -165,6 +165,7 @@ const ManageStaff = () => {
                 {selectedStaff ? (
                     <Button
                         variant="dark"
+                        style={{ marginTop: "1rem" }}
                         onClick={() => {
                             handleEditStaff();
                         }}
@@ -174,6 +175,7 @@ const ManageStaff = () => {
                 ) : (
                     <Button
                         variant="dark"
+                        style={{ marginTop: "1rem" }}
                         onClick={() => {
                             handleAddStaff();
                         }}

@@ -43,12 +43,13 @@ body {
     align-items: center;
     max-height: 100%;
     overflow-y: auto;
-    margin-left: 7rem;
+    margin-left: 8rem;
+    margin-right: 0;
 }
 
 .staff-table {
     margin-top: 2rem;
-    margin-right: 8.5rem;
+    margin-right: 2rem;
 }
 
 .staff-form {
