@@ -6,6 +6,7 @@ export default function NavbarComponentAdmin() {
             expand="lg"
             bg="dark"
             data-bs-theme="dark"
+            variant="dark"
             fixed="top"
             className="flex-column navbar-custom full-height d-flex justify-content-center"
         >

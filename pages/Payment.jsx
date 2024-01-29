@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Container, Button, Typography } from "@mui/material";
 import shortUUID from "short-uuid";
 import axios from "axios";
+import {
+    MDBCard,
+    MDBCardBody,
+    MDBCol,
+    MDBContainer,
+    MDBRow,
+    MDBTypography,
+    MDBBtn,
+} from "mdb-react-ui-kit";
 
 const Payment = () => {
     const [orderDetails, setOrderDetails] = useState([]);
@@ -33,41 +41,77 @@ const Payment = () => {
             orderID: orderID,
         });
 
+        console.log(response);
+
         if (response.data.status === "success") {
-            setHeader("Thank you for being with Brodium");
+            setHeader("Gay Nigga");
             localStorage.removeItem("bill"); // Remove "bill" from local storage
         }
     };
 
     return (
-        <Container
+        <MDBContainer
+            className="py-5"
             style={{
+                marginLeft: "7.5rem",
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
                 justifyContent: "center",
+                alignItems: "center",
                 height: "100vh",
             }}
         >
-            <Typography variant="h4">{header}</Typography>
-            <Typography variant="h6">{customerName}</Typography>
-            <Typography variant="body1">{invoiceNumber}</Typography>
-            <Typography variant="body1">
-                {new Date().toLocaleString()}
-            </Typography>
-            {orderDetails.map((item, index) => (
-                <div key={index}>
-                    <Typography variant="body1">
-                        {item.itemName} x {item.quantity}
-                    </Typography>
-                    <Typography variant="body1">{item.totalamount}</Typography>
-                </div>
-            ))}
-            <Button variant="contained" color="primary" onClick={handlePayment}>
-                Everything is correct
-            </Button>
-            <Typography variant="h6">Total: {totalAmount}</Typography>
-        </Container>
+            <MDBCard>
+                <MDBCardBody className="mx-4">
+                    <MDBContainer>
+                        <p
+                            className="my-5 text-center"
+                            style={{ fontSize: "30px" }}
+                        >
+                            {header}
+                        </p>
+                        <MDBRow>
+                            <MDBTypography listUnStyled>
+                                <li className="text-black">{customerName}</li>
+                                <li className="text-muted mt-1">
+                                    <span className="text-black">Invoice</span>{" "}
+                                    #{invoiceNumber}
+                                </li>
+                                <li className="text-black mt-1">
+                                    {new Date().toLocaleString()}
+                                </li>
+                            </MDBTypography>
+                            <hr />
+                            {orderDetails.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    <MDBCol xl="10">
+                                        <p>
+                                            {item.itemName} x {item.quantity}
+                                        </p>
+                                    </MDBCol>
+                                    <MDBCol xl="2">
+                                        <p className="float-end">
+                                            {item.totalamount}
+                                        </p>
+                                    </MDBCol>
+                                    <hr />
+                                </React.Fragment>
+                            ))}
+                            <MDBRow className="text-black">
+                                <MDBCol xl="12">
+                                    <p className="float-end fw-bold">
+                                        Total: {totalAmount}
+                                    </p>
+                                </MDBCol>
+                                <hr style={{ border: "2px solid black" }} />
+                            </MDBRow>
+                            <MDBBtn color="primary" onClick={handlePayment}>
+                                Everything is correct
+                            </MDBBtn>
+                        </MDBRow>
+                    </MDBContainer>
+                </MDBCardBody>
+            </MDBCard>
+        </MDBContainer>
     );
 };
 

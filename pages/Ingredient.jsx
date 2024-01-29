@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Table, Form, Button } from "react-bootstrap";
+import {
+    MDBContainer,
+    MDBInput,
+    MDBBtn,
+    MDBTable,
+    MDBTableHead,
+    MDBTableBody,
+} from "mdb-react-ui-kit";
 import { ToastContainer, toast } from "react-toastify";
 
 const ManageIngredients = () => {
@@ -93,16 +100,19 @@ const ManageIngredients = () => {
     };
 
     return (
-        <Container className="table-container">
+        <MDBContainer
+            className="py-5"
+            style={{
+                marginLeft: "7rem",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh",
+            }}
+        >
             <ToastContainer />
-            <Table
-                striped
-                bordered
-                hover
-                className="staff-table"
-                variant="dark"
-            >
-                <thead>
+            <MDBTable color="dark" hover striped className="my-table">
+                <MDBTableHead>
                     <tr>
                         <th>#</th>
                         <th>Ingredient ID</th>
@@ -112,36 +122,39 @@ const ManageIngredients = () => {
                         <th>Item ID</th>
                         <th>Action</th>
                     </tr>
-                </thead>
-                <tbody>
+                </MDBTableHead>
+                <MDBTableBody>
                     {sortedIngredientList.map((ingredient, index) => (
                         <tr key={index}>
                             <td>
-                                <Form.Check
-                                    type="radio"
-                                    name="selectedIngredient"
-                                    checked={
-                                        selectedIngredient ===
-                                        ingredient.ingredientID
-                                    }
-                                    onClick={() => {
-                                        if (
-                                            isClicked &&
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="selectedIngredient"
+                                        checked={
                                             selectedIngredient ===
-                                                ingredient.ingredientID
-                                        ) {
-                                            setSelectedIngredient(null);
-                                            setIsClicked(false);
-                                        } else {
-                                            setIsClicked(true);
-                                        }
-                                    }}
-                                    onChange={() =>
-                                        setSelectedIngredient(
                                             ingredient.ingredientID
-                                        )
-                                    }
-                                />
+                                        }
+                                        onClick={() => {
+                                            if (
+                                                isClicked &&
+                                                selectedIngredient ===
+                                                    ingredient.ingredientID
+                                            ) {
+                                                setSelectedIngredient(null);
+                                                setIsClicked(false);
+                                            } else {
+                                                setIsClicked(true);
+                                            }
+                                        }}
+                                        onChange={() =>
+                                            setSelectedIngredient(
+                                                ingredient.ingredientID
+                                            )
+                                        }
+                                    />
+                                </div>
                             </td>
                             <td>{ingredient.ingredientID}</td>
                             <td>{ingredient.name}</td>
@@ -151,91 +164,99 @@ const ManageIngredients = () => {
                             <td>
                                 {selectedIngredient ===
                                     ingredient.ingredientID && (
-                                    <Button
-                                        variant="danger"
-                                        onClick={() => {
+                                    <MDBBtn
+                                        color="danger"
+                                        onClick={() =>
                                             handleRemoveIngredient(
                                                 ingredient.ingredientID
-                                            );
-                                        }}
+                                            )
+                                        }
                                     >
                                         Remove
-                                    </Button>
+                                    </MDBBtn>
                                 )}
                             </td>
                         </tr>
                     ))}
-                </tbody>
-            </Table>
-            <Form className="ingredient-form">
-                <Form.Group controlId="formName">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter name"
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </Form.Group>
+                </MDBTableBody>
+            </MDBTable>
+            <div className="mb-3">
+                <label htmlFor="formName" className="form-label">
+                    Name
+                </label>
+                <MDBInput
+                    id="formName"
+                    type="text"
+                    placeholder="Enter name"
+                    onChange={(e) => setName(e.target.value)}
+                />
+            </div>
 
-                <Form.Group controlId="formAmount">
-                    <Form.Label>Amount</Form.Label>
-                    <Form.Control
-                        type="number"
-                        placeholder="Enter amount"
-                        onChange={(e) => setAmount(e.target.value)}
-                    />
-                </Form.Group>
+            <div className="mb-3">
+                <label htmlFor="formAmount" className="form-label">
+                    Amount
+                </label>
+                <MDBInput
+                    id="formAmount"
+                    type="number"
+                    placeholder="Enter amount"
+                    onChange={(e) => setAmount(e.target.value)}
+                />
+            </div>
 
-                <Form.Group controlId="formThreshold">
-                    <Form.Label>Threshold</Form.Label>
-                    <Form.Control
-                        type="number"
-                        placeholder="Enter threshold"
-                        onChange={(e) => setThreshold(e.target.value)}
-                    />
-                </Form.Group>
+            <div className="mb-3">
+                <label htmlFor="formThreshold" className="form-label">
+                    Threshold
+                </label>
+                <MDBInput
+                    id="formThreshold"
+                    type="number"
+                    placeholder="Enter threshold"
+                    onChange={(e) => setThreshold(e.target.value)}
+                />
+            </div>
 
-                <Form.Group controlId="formItemID">
-                    <Form.Label>Item ID</Form.Label>
-                    <Form.Control
-                        type="number"
-                        placeholder="Enter item ID"
-                        onChange={(e) => setItemID(e.target.value)}
-                    />
-                </Form.Group>
-
+            <div className="mb-3">
+                <label htmlFor="formItemID" className="form-label">
+                    Item ID
+                </label>
+                <MDBInput
+                    id="formItemID"
+                    type="number"
+                    placeholder="Enter item ID"
+                    onChange={(e) => setItemID(e.target.value)}
+                />
+            </div>
+            <div style={{ paddingBottom: "3rem" }}>
                 {selectedIngredient ? (
-                    <Button
-                        variant="dark"
+                    <MDBBtn
+                        color="dark"
                         style={{ marginTop: "1rem" }}
-                        onClick={() => {
-                            handleEditIngredient();
-                        }}
+                        onClick={() => handleEditIngredient()}
                     >
                         Edit
-                    </Button>
+                    </MDBBtn>
                 ) : (
-                    <Button
-                        variant="dark"
-                        style={{ marginTop: "1rem" }}
-                        onClick={() => {
-                            handleAddIngredient();
-                        }}
+                    <MDBBtn
+                        color="dark"
+                        style={{ marginTop: "1rem", marginLeft: "20rem" }}
+                        onClick={() => handleAddIngredient()}
                     >
                         Add
-                    </Button>
+                    </MDBBtn>
                 )}
-                <Button
-                    variant="danger"
-                    style={{ marginLeft: "1rem", marginTop: "1rem" }}
-                    onClick={() => {
-                        resetAllAmounts();
+                <MDBBtn
+                    color="danger"
+                    style={{
+                        marginLeft: "1rem",
+                        marginTop: "1rem",
                     }}
+                    onClick={() => resetAllAmounts()}
                 >
                     Reset All
-                </Button>
-            </Form>
-        </Container>
+                </MDBBtn>
+            </div>
+        </MDBContainer>
     );
 };
 

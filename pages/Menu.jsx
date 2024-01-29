@@ -42,8 +42,6 @@ const Menu = () => {
             localStorage.setItem("maxOrderId", maxOrderId.toString());
 
             const existingOrder = JSON.parse(localStorage.getItem("order"));
-            const existingTable = localStorage.getItem("selectedTable");
-            const existingStaff = localStorage.getItem("staffID");
 
             // If there is an existing order, store the orderID in local storage
             if (existingOrder) {

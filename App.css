@@ -38,13 +38,19 @@ body {
 }
 
 .table-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-height: 100%;
-    overflow-y: auto;
-    margin-left: 8rem;
-    margin-right: 0;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.table-container-Table {
+    scale: .8;
+    width: 80%;
+    margin-top: 3rem;
+}
+
+.my-table {
+    scale: .9;
+    border-collapse: collapse; /* This ensures the borders between cells are not doubled */
 }
 
 .staff-table {

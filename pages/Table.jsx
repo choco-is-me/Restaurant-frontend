@@ -97,7 +97,7 @@ const Table = () => {
                     Selected Table: {selectedTable} Guest: {selectedGuest}
                 </h2>
             </div>
-            <Container className="table-container">
+            <Container className="table-container-Table">
                 <BootstrapTable striped bordered hover variant="dark">
                     <thead>
                         <tr>
