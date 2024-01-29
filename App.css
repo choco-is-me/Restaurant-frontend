@@ -39,7 +39,7 @@ body {
 
 .table-container {
     width: 80%;
-    margin: 0 auto;
+    margin-top: 3rem;
 }
 
 .table-container-Table {
@@ -50,7 +50,7 @@ body {
 
 .my-table {
     scale: .9;
-    border-collapse: collapse; /* This ensures the borders between cells are not doubled */
+    border-collapse: collapse;
 }
 
 .staff-table {

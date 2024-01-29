@@ -44,8 +44,8 @@ const Payment = () => {
         console.log(response);
 
         if (response.data.status === "success") {
-            setHeader("Gay Nigga");
-            localStorage.removeItem("bill"); // Remove "bill" from local storage
+            setHeader("Thank you for spending time with Brodium");
+            localStorage.removeItem("bill");
         }
     };
 

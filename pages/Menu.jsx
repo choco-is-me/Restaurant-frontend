@@ -273,7 +273,15 @@ const Menu = () => {
             >
                 <ToastContainer />
                 <Modal.Header closeButton>
-                    <Modal.Title>Your Cart</Modal.Title>
+                    <Modal.Title
+                        style={{
+                            fontFamily: "cursive",
+                            fontWeight: "bold",
+                            fontSize: "30px",
+                        }}
+                    >
+                        Your Cart
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {cart.map((item) => {
@@ -284,12 +292,35 @@ const Menu = () => {
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "space-between",
+                                    fontFamily: "-moz-initial",
+                                    fontWeight: "bold",
                                 }}
                             >
-                                <p style={{ margin: 0 }}>{item.name}</p>
-                                <div>
+                                <p
+                                    style={{
+                                        margin: 0,
+                                    }}
+                                >
+                                    {item.name}
+                                </p>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                >
                                     <Button
-                                        style={{ marginBottom: "10px" }}
+                                        variant="dark"
+                                        style={{
+                                            display: "flex",
+                                            marginBottom: "10px",
+                                            padding: "0 10px",
+                                            fontSize: "20px",
+                                            width: "30px",
+                                            height: "30px",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                        }}
                                         onClick={() =>
                                             handleQuantityChange(item, "+")
                                         }
@@ -298,15 +329,32 @@ const Menu = () => {
                                     </Button>
                                     <span
                                         style={{
+                                            display: "flex",
                                             margin: "0 10px",
-                                            fontWeight: "bold",
-                                            fontSize: "20px",
+                                            marginBottom: "7px",
+                                            marginRight: "10px",
+                                            fontSize: "16px",
+                                            fontFamily: "fantasy",
+                                            alignItems: "center",
+                                            color: "#bc6c25",
+                                            width: "20px", // fixed width
+                                            justifyContent: "center", // center the quantity
                                         }}
                                     >
                                         {item.quantity}
                                     </span>
                                     <Button
-                                        style={{ marginBottom: "10px" }}
+                                        variant="dark"
+                                        style={{
+                                            display: "flex",
+                                            marginBottom: "10px",
+                                            padding: "0 10px",
+                                            fontSize: "20px",
+                                            width: "30px",
+                                            height: "30px",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                        }}
                                         disabled={item.quantity <= 0}
                                         onClick={() =>
                                             handleQuantityChange(item, "-")
@@ -320,11 +368,17 @@ const Menu = () => {
                     })}
                 </Modal.Body>
                 <Modal.Footer>
-                    <div style={{ flexGrow: 1, textAlign: "left" }}>
-                        <p>Total Price: {totalPrice}</p>
+                    <div
+                        style={{
+                            flexGrow: 1,
+                            textAlign: "left",
+                            fontFamily: "fantasy",
+                        }}
+                    >
+                        <p>Total Price: {totalPrice} VND</p>
                     </div>
                     <Button
-                        variant="secondary"
+                        variant="warning"
                         onClick={() => {
                             handleClose();
                         }}
@@ -332,7 +386,7 @@ const Menu = () => {
                         Close
                     </Button>
                     <Button
-                        variant="primary"
+                        variant="dark"
                         onClick={() => {
                             handleConfirm();
                         }}
@@ -356,10 +410,8 @@ const Menu = () => {
                             style={{
                                 width: "18rem",
                                 // Change the background color if the item is selected
-                                backgroundColor: selectedItems.includes(
-                                    item.itemID
-                                )
-                                    ? "orange"
+                                background: selectedItems.includes(item.itemID)
+                                    ? "linear-gradient(to right, #FFA500, #FF4500)" // gradient color
                                     : "white",
                             }}
                         >
@@ -369,16 +421,47 @@ const Menu = () => {
                                 style={{ height: "200px" }}
                             />
                             <Card.Body>
-                                <Card.Title>{item.name}</Card.Title>
-                                <Card.Text>{item.price}</Card.Text>
-                                <Button
-                                    variant="dark"
-                                    onClick={() => {
-                                        addToCart(item);
+                                <Card.Title
+                                    style={{
+                                        fontWeight: "bold",
+                                        fontFamily: "-moz-initial",
                                     }}
                                 >
-                                    +
-                                </Button>
+                                    {item.name}
+                                </Card.Title>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <Card.Text
+                                        style={{
+                                            fontFamily: "fantasy",
+                                        }}
+                                    >
+                                        {item.price} VND
+                                    </Card.Text>
+                                    <Button
+                                        style={{
+                                            display: "flex",
+                                            marginBottom: "10px",
+                                            padding: "0 10px",
+                                            fontSize: "20px",
+                                            width: "30px",
+                                            height: "30px",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                        }}
+                                        variant="dark"
+                                        onClick={() => {
+                                            addToCart(item);
+                                        }}
+                                    >
+                                        +
+                                    </Button>
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>

@@ -101,7 +101,6 @@ const ManageIngredients = () => {
 
     return (
         <MDBContainer
-            className="py-5"
             style={{
                 marginLeft: "7rem",
                 flexDirection: "column",
