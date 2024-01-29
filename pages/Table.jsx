@@ -24,15 +24,12 @@ const Table = () => {
                 response.data.sort((a, b) => a.tableNo - b.tableNo);
                 setTables(response.data);
             })
-            .catch((error) => console.error(error));
+            .catch((error) => {
+                console.error(error);
+            });
     };
 
     useEffect(() => {
-        // Update selectedTable and selectedGuest from local storage
-        const storedTable = localStorage.getItem("selectedTable");
-        const storedGuest = localStorage.getItem("selectedGuest");
-        setSelectedTable(storedTable);
-        setSelectedGuest(storedGuest);
         fetchData();
     }, []);
 
@@ -82,25 +79,29 @@ const Table = () => {
 
     return (
         <>
-            <div
-                style={{
-                    position: "absolute",
-                    top: "7%",
-                    left: "40%",
-                    transform: "translateY(-50%)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                }}
-            >
-                <h2>
+            <div></div>
+            <Container className="table-container-Table">
+                <h2
+                    style={{
+                        marginBottom: "1rem",
+                        alignSelf: "center",
+                    }}
+                >
                     Selected Table: {selectedTable} Guest: {selectedGuest}
                 </h2>
-            </div>
-            <Container className="table-container-Table">
+                <Button
+                    style={{
+                        marginBottom: "1rem",
+                        width: "fit-content",
+                    }}
+                    onClick={() => handleSelectTable(null, null)}
+                >
+                    Clear selection
+                </Button>
                 <BootstrapTable striped bordered hover variant="dark">
                     <thead>
                         <tr>
+                            <th>Select</th>
                             <th>TableNo</th>
                             <th>Guest</th>
                             <th>Action</th>
@@ -108,16 +109,21 @@ const Table = () => {
                     </thead>
                     <tbody>
                         {tables.map((table) => (
-                            <tr
-                                key={table.tableNo}
-                                onDoubleClick={() =>
-                                    table.guestName &&
-                                    handleSelectTable(
-                                        table.tableNo,
-                                        table.guestName
-                                    )
-                                }
-                            >
+                            <tr key={table.tableNo}>
+                                <td>
+                                    <Form.Check
+                                        type="radio"
+                                        checked={selectedTable == table.tableNo}
+                                        disabled={!table.guestName}
+                                        onChange={() =>
+                                            handleSelectTable(
+                                                table.tableNo,
+                                                table.guestName
+                                            )
+                                        }
+                                    />
+                                </td>
+
                                 <td>{table.tableNo}</td>
                                 <td>
                                     {table.guestName ? (
@@ -141,7 +147,7 @@ const Table = () => {
                                     )}
                                 </td>
                                 <td>
-                                    {table.tableNo === selectedTable && (
+                                    {table.tableNo == selectedTable && (
                                         <Button
                                             variant="danger"
                                             onClick={(e) =>
