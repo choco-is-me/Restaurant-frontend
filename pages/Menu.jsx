@@ -42,6 +42,14 @@ const Menu = () => {
             localStorage.setItem("maxOrderId", maxOrderId.toString());
 
             const existingOrder = JSON.parse(localStorage.getItem("order"));
+            const existingTable = localStorage.getItem("selectedTable");
+            const existingStaff = localStorage.getItem("staffID");
+
+            // If there is an existing order, store the orderID in local storage
+            if (existingOrder) {
+                localStorage.setItem("bill", existingOrder.orderId.toString());
+            }
+
             if (existingOrder && existingOrder.items) {
                 setSelectedItems(existingOrder.items.map((i) => i.itemId));
                 setCart(existingOrder.items);
@@ -75,7 +83,8 @@ const Menu = () => {
         }
         localStorage.setItem("maxOrderId", orderId);
 
-        const order = existingOrder || {
+        // Create a new order if it doesn't exist
+        let order = existingOrder || {
             orderId: parseInt(orderId, 10),
             tableNo: existingTable,
             staffId: existingStaff,
@@ -125,8 +134,12 @@ const Menu = () => {
             });
         }
 
+        // Store the orderID in local storage
+        localStorage.setItem("bill", order.orderId.toString());
+
         if (order.items.length === 0) {
             localStorage.removeItem("order");
+            localStorage.removeItem("bill");
         } else {
             localStorage.setItem("order", JSON.stringify(order));
         }
@@ -184,8 +197,17 @@ const Menu = () => {
         } else if (quantity === 1) {
             // Remove the item from the order if the quantity is 1 and the user presses "-"
             order.items.splice(itemIndex, 1);
-            // Save the updated order to local storage
-            localStorage.setItem("order", JSON.stringify(order));
+
+            // If the order is empty, remove it from local storage
+            if (order.items.length === 0) {
+                localStorage.removeItem("order");
+                localStorage.removeItem("bill");
+            } else {
+                // Save the updated order to local storage
+                localStorage.setItem("order", JSON.stringify(order));
+            }
+
+            setCart(order.items);
             fetchData();
             return; // Return here after removing the item
         }
@@ -195,6 +217,8 @@ const Menu = () => {
 
         // Save the updated order to local storage
         localStorage.setItem("order", JSON.stringify(order));
+
+        fetchData();
     };
 
     const handleConfirm = async () => {
@@ -267,16 +291,24 @@ const Menu = () => {
                                 <p style={{ margin: 0 }}>{item.name}</p>
                                 <div>
                                     <Button
+                                        style={{ marginBottom: "10px" }}
                                         onClick={() =>
                                             handleQuantityChange(item, "+")
                                         }
                                     >
                                         +
                                     </Button>
-                                    <span style={{ margin: "0 10px" }}>
+                                    <span
+                                        style={{
+                                            margin: "0 10px",
+                                            fontWeight: "bold",
+                                            fontSize: "20px",
+                                        }}
+                                    >
                                         {item.quantity}
                                     </span>
                                     <Button
+                                        style={{ marginBottom: "10px" }}
                                         disabled={item.quantity <= 0}
                                         onClick={() =>
                                             handleQuantityChange(item, "-")
