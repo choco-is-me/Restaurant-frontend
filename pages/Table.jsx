@@ -58,6 +58,11 @@ const Table = () => {
                 }
             })
             .then(fetchData)
+            .then(() => {
+                if (tableNo === selectedTable) {
+                    handleSelectTable(null, null);
+                }
+            })
             .catch((error) => console.error(error));
     };
 

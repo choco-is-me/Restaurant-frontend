@@ -28,7 +28,7 @@ function Record() {
         axios
             .get("display_record")
             .then((response) => setRecordList(response.data))
-            .catch((error) => showToastWithMessage(`Error: ${error}`));
+            .catch(() => showToastWithMessage(`Record Is Empty`));
     }, []);
 
     return (

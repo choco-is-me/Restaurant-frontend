@@ -34,6 +34,7 @@ const Order = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [activeOrders, setActiveOrders] = useState([]);
     const [archivedOrders, setArchivedOrders] = useState([]);
+    const [isTableVisible, setTableVisible] = useState(false);
 
     const fetchData = () => {
         axios
@@ -91,7 +92,7 @@ const Order = () => {
     return (
         <Container className="table-container">
             <ToastContainer />
-            <h2>Active Orders</h2>
+            <h2 style={{ fontWeight: "bold" }}>Active Orders</h2>
             <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
@@ -115,6 +116,7 @@ const Order = () => {
                                                 : order.orderID
                                         )
                                     }
+                                    onChange={() => {}}
                                 />
                             </td>
                             <td>{order.orderID}</td>
@@ -169,84 +171,98 @@ const Order = () => {
                     ))}
                 </tbody>
             </Table>
-            <h2>Archived Orders</h2>
-            <Table striped bordered hover variant="dark">
-                <thead>
-                    <tr>
-                        <th>Select</th>
-                        <th>Order ID</th>
-                        <th>Order Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {archivedOrders.map((order) => (
-                        <tr key={order.orderID}>
-                            <td>
-                                <Form.Check
-                                    type="radio"
-                                    checked={selectedOrder === order.orderID}
-                                    onChange={() =>
-                                        setSelectedOrder(
+            <h2>
+                <span
+                    style={{ cursor: "pointer", fontWeight: "bold" }}
+                    onClick={() => setTableVisible(!isTableVisible)}
+                >
+                    Archived Orders
+                </span>
+            </h2>
+            {isTableVisible && (
+                <Table striped bordered hover variant="dark">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Order ID</th>
+                            <th>Order Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {archivedOrders.map((order) => (
+                            <tr key={order.orderID}>
+                                <td>
+                                    <Form.Check
+                                        type="radio"
+                                        checked={
                                             selectedOrder === order.orderID
-                                                ? null
-                                                : order.orderID
-                                        )
-                                    }
-                                />
-                            </td>
-                            <td>{order.orderID}</td>
-                            <td>
-                                <Dropdown
-                                    onSelect={(status) =>
-                                        handleStatusChange(
-                                            order.orderID,
-                                            status
-                                        )
-                                    }
-                                >
-                                    <Dropdown.Toggle
-                                        variant={
-                                            statusVariantMap[order.orderStatus]
                                         }
-                                        id="dropdown-basic"
-                                    >
-                                        {statusMap[order.orderStatus]}
-                                    </Dropdown.Toggle>
-
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item eventKey="1">
-                                            Pending
-                                        </Dropdown.Item>
-                                        <Dropdown.Item eventKey="2">
-                                            Cooking
-                                        </Dropdown.Item>
-                                        <Dropdown.Item eventKey="3">
-                                            Served
-                                        </Dropdown.Item>
-                                        <Dropdown.Item eventKey="4">
-                                            Archived
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </td>
-                            <td>
-                                {selectedOrder === order.orderID && (
-                                    <Button
-                                        variant="danger"
                                         onClick={() =>
-                                            handleRemoveOrder(order.orderID)
+                                            setSelectedOrder(
+                                                selectedOrder === order.orderID
+                                                    ? null
+                                                    : order.orderID
+                                            )
                                         }
-                                        disabled={order.orderStatus === 3} // Disable if order status is 'Served'
+                                        onChange={() => {}}
+                                    />
+                                </td>
+                                <td>{order.orderID}</td>
+                                <td>
+                                    <Dropdown
+                                        onSelect={(status) =>
+                                            handleStatusChange(
+                                                order.orderID,
+                                                status
+                                            )
+                                        }
                                     >
-                                        Remove
-                                    </Button>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+                                        <Dropdown.Toggle
+                                            variant={
+                                                statusVariantMap[
+                                                    order.orderStatus
+                                                ]
+                                            }
+                                            id="dropdown-basic"
+                                        >
+                                            {statusMap[order.orderStatus]}
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item eventKey="1">
+                                                Pending
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="2">
+                                                Cooking
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="3">
+                                                Served
+                                            </Dropdown.Item>
+                                            <Dropdown.Item eventKey="4">
+                                                Archived
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </td>
+                                <td>
+                                    {selectedOrder === order.orderID && (
+                                        <Button
+                                            variant="danger"
+                                            onClick={() =>
+                                                handleRemoveOrder(order.orderID)
+                                            }
+                                            disabled={order.orderStatus === 3} // Disable if order status is 'Served'
+                                        >
+                                            Remove
+                                        </Button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            )}
         </Container>
     );
 };
