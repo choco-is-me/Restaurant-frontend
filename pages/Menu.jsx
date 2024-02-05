@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Card, Modal } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 const Menu = () => {
@@ -15,7 +15,6 @@ const Menu = () => {
             progress: undefined,
             className: "toast-message",
             progressClassName: "toast-progress-bar",
-            zIndex: 1064,
         });
     };
     const [selectedItems, setSelectedItems] = useState([]);
@@ -43,11 +42,6 @@ const Menu = () => {
 
             const existingOrder = JSON.parse(localStorage.getItem("order"));
 
-            // If there is an existing order, store the orderID in local storage
-            if (existingOrder) {
-                localStorage.setItem("bill", existingOrder.orderId.toString());
-            }
-
             if (existingOrder && existingOrder.items) {
                 setSelectedItems(existingOrder.items.map((i) => i.itemId));
                 setCart(existingOrder.items);
@@ -68,7 +62,7 @@ const Menu = () => {
         const existingTable = localStorage.getItem("selectedTable");
         const existingStaff = localStorage.getItem("staffID");
 
-        if (!existingTable) {
+        if (existingTable == "null") {
             showToastWithMessage("Please go back to select a table.");
             return;
         }
@@ -132,12 +126,8 @@ const Menu = () => {
             });
         }
 
-        // Store the orderID in local storage
-        localStorage.setItem("bill", order.orderId.toString());
-
         if (order.items.length === 0) {
             localStorage.removeItem("order");
-            localStorage.removeItem("bill");
         } else {
             localStorage.setItem("order", JSON.stringify(order));
         }
@@ -199,7 +189,6 @@ const Menu = () => {
             // If the order is empty, remove it from local storage
             if (order.items.length === 0) {
                 localStorage.removeItem("order");
-                localStorage.removeItem("bill");
             } else {
                 // Save the updated order to local storage
                 localStorage.setItem("order", JSON.stringify(order));
@@ -250,7 +239,6 @@ const Menu = () => {
             className="menu"
             style={{ paddingTop: "50px", marginTop: "50rem" }}
         >
-            <ToastContainer />
             <Button
                 className="cart-button"
                 variant="dark"
@@ -271,7 +259,6 @@ const Menu = () => {
                 show={show}
                 onHide={handleClose}
             >
-                <ToastContainer />
                 <Modal.Header closeButton>
                     <Modal.Title
                         style={{

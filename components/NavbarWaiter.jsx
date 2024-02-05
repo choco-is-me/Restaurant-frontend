@@ -3,7 +3,6 @@ import { Nav, Navbar, Container } from "react-bootstrap";
 export default function NavbarComponentWaiter() {
     return (
         <Navbar
-            expand="lg"
             bg="dark"
             data-bs-theme="dark"
             variant="dark"
@@ -12,16 +11,14 @@ export default function NavbarComponentWaiter() {
         >
             <Container fluid>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                <Navbar.Collapse id="responsive-navbar-nav" className="w-100">
-                    <Nav className="me-auto flex-column text-center">
-                        <Navbar.Brand className="mx-auto">Waiter</Navbar.Brand>
-                        <Nav.Link href="/waiter">Table</Nav.Link>
-                        <Nav.Link href="/waiter/menu">Menu</Nav.Link>
-                        <Nav.Link href="/waiter/order">Order</Nav.Link>
-                        <Nav.Link href="/waiter/payment">Payment</Nav.Link>
-                        <Nav.Link href="/waiter/logout">Logout</Nav.Link>
-                    </Nav>
-                </Navbar.Collapse>
+                <Nav className="me-auto flex-column text-center">
+                    <Navbar.Brand className="mx-auto">Waiter</Navbar.Brand>
+                    <Nav.Link href="/waiter">Table</Nav.Link>
+                    <Nav.Link href="/waiter/menu">Menu</Nav.Link>
+                    <Nav.Link href="/waiter/order">Order</Nav.Link>
+                    <Nav.Link href="/waiter/payment">Payment</Nav.Link>
+                    <Nav.Link href="/waiter/logout">Logout</Nav.Link>
+                </Nav>
             </Container>
         </Navbar>
     );

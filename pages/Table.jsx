@@ -6,6 +6,7 @@ import {
     Container,
 } from "react-bootstrap";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Table = () => {
     const [tables, setTables] = useState([]);
@@ -16,6 +17,20 @@ const Table = () => {
         localStorage.getItem("selectedGuest") || null
     );
 
+    const showToastWithMessage = (message) => {
+        toast(message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            className: "toast-message",
+            progressClassName: "toast-progress-bar",
+        });
+    };
+
     const fetchData = () => {
         axios
             .get("display_tables")
@@ -25,7 +40,7 @@ const Table = () => {
                 setTables(response.data);
             })
             .catch((error) => {
-                console.error(error);
+                showToastWithMessage(error);
             });
     };
 
@@ -40,7 +55,7 @@ const Table = () => {
             .post("make_table", { tableNo, guestName })
             .then((response) => response.data)
             .then(fetchData)
-            .catch((error) => console.error(error));
+            .catch((error) => showToastWithMessage(error));
     };
 
     const handleRemoveTable = (tableNo, e) => {
@@ -63,7 +78,7 @@ const Table = () => {
                     handleSelectTable(null, null);
                 }
             })
-            .catch((error) => console.error(error));
+            .catch((error) => showToastWithMessage(error));
     };
 
     const handleSelectTable = (tableNo, guestName) => {
@@ -84,7 +99,6 @@ const Table = () => {
 
     return (
         <>
-            <div></div>
             <Container className="table-container-Table">
                 <h2
                     style={{

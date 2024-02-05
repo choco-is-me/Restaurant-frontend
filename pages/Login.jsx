@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 const Login = () => {
@@ -102,7 +102,6 @@ const Login = () => {
             className="d-flex justify-content-center align-items-center"
             style={{ minHeight: "100vh" }}
         >
-            <ToastContainer />
             <div className="w-100" style={{ maxWidth: "400px" }}>
                 <h1 className="text-center mb-4">Brodium Restaurant</h1>
                 <Form onSubmit={handleLogin}>

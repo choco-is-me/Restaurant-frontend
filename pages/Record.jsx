@@ -6,43 +6,95 @@ import {
     MDBTableBody,
     MDBContainer,
 } from "mdb-react-ui-kit";
-import { ToastContainer, toast } from "react-toastify";
 
 function Record() {
-    const showToastWithMessage = (message) => {
-        toast(message, {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            className: "toast-message",
-            progressClassName: "toast-progress-bar",
-        });
-    };
     const [recordList, setRecordList] = useState([]);
+    const [shiftTotals, setShiftTotals] = useState({});
 
     useEffect(() => {
-        axios
-            .get("display_record")
-            .then((response) => setRecordList(response.data))
-            .catch(() => showToastWithMessage(`Record Is Empty`));
+        axios.get("display_record").then((response) => {
+            if (response.data.length === 0) {
+            } else {
+                setRecordList(response.data);
+                const totals = response.data.reduce((acc, record) => {
+                    acc[record.shift] =
+                        (acc[record.shift] || 0) + record.totalAmount;
+                    return acc;
+                }, {});
+                setShiftTotals(totals);
+            }
+        });
     }, []);
+
+    if (recordList.length === 0) {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                    width: "100%",
+                    height: "100vh",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "2rem",
+                }}
+            >
+                Record Is Empty
+            </div>
+        );
+    }
 
     return (
         <MDBContainer
             style={{
+                display: "flex",
                 marginLeft: "7rem",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
                 height: "100vh",
                 borderCollapse: "collapse",
+                borderSpacing: "0",
+                width: "100%",
+                overflowX: "auto",
+                overflowY: "auto",
             }}
         >
-            <ToastContainer />
+            <h2
+                style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "center",
+                }}
+            >
+                Shift Summary
+            </h2>
+            <MDBTable color="dark" hover striped className="my-table">
+                <MDBTableHead>
+                    <tr>
+                        <th scope="col">Shift</th>
+                        <th scope="col">Revenue</th>
+                    </tr>
+                </MDBTableHead>
+                <MDBTableBody>
+                    {Object.entries(shiftTotals).map(
+                        ([shift, total], index) => (
+                            <tr key={index}>
+                                <td>{shift}</td>
+                                <td>{total} VND</td>
+                            </tr>
+                        )
+                    )}
+                </MDBTableBody>
+            </MDBTable>
+            <h2
+                style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "center",
+                }}
+            >
+                Shift Details
+            </h2>
             <MDBTable color="dark" hover striped className="my-table">
                 <MDBTableHead>
                     <tr>
@@ -54,8 +106,8 @@ function Record() {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {recordList.map((record) => (
-                        <tr key={record.orderId}>
+                    {recordList.map((record, index) => (
+                        <tr key={index}>
                             <td>{record.orderId}</td>
                             <td>{record.staffId}</td>
                             <td>{record.shift}</td>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Table, Dropdown, Button, Form } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const statusMap = {
     1: "Pending",
@@ -91,7 +91,6 @@ const Order = () => {
 
     return (
         <Container className="table-container">
-            <ToastContainer />
             <h2 style={{ fontWeight: "bold" }}>Active Orders</h2>
             <Table striped bordered hover variant="dark">
                 <thead>
@@ -148,7 +147,10 @@ const Order = () => {
                                         <Dropdown.Item eventKey="3">
                                             Served
                                         </Dropdown.Item>
-                                        <Dropdown.Item eventKey="4">
+                                        <Dropdown.Item
+                                            eventKey="4"
+                                            disabled={true}
+                                        >
                                             Archived
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
@@ -225,6 +227,7 @@ const Order = () => {
                                                 ]
                                             }
                                             id="dropdown-basic"
+                                            disabled={true} // Disable the dropdown for archived orders
                                         >
                                             {statusMap[order.orderStatus]}
                                         </Dropdown.Toggle>

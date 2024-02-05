@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import shortUUID from "short-uuid";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import {
     MDBCard,
     MDBCardBody,
@@ -17,7 +17,10 @@ const Payment = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const [invoiceNumber, setInvoiceNumber] = useState("");
     const [customerName, setCustomerName] = useState("");
-    const [header, setHeader] = useState("Your Bill");
+    const [servedOrders, setServedOrders] = useState([]);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [refresh, setRefresh] = useState(false);
+
     const showToastWithMessage = (message) => {
         toast(message, {
             position: "top-center",
@@ -34,9 +37,9 @@ const Payment = () => {
 
     useEffect(() => {
         const fetchOrderDetails = async () => {
-            const orderID = localStorage.getItem("bill"); // Get orderID from local storage
+            if (!selectedOrder) return;
             const response = await axios.post("get_order_details", {
-                orderID: orderID,
+                orderID: selectedOrder,
             });
             setOrderDetails(response.data);
             setTotalAmount(
@@ -44,30 +47,44 @@ const Payment = () => {
             );
         };
 
+        const fetchServedOrders = async () => {
+            const response = await axios.get("display_order_status");
+            const servedOrders = response.data.filter(
+                (order) => order.orderStatus === 3
+            );
+            setServedOrders(servedOrders);
+        };
+
         setInvoiceNumber(shortUUID.generate());
         setCustomerName(localStorage.getItem("selectedGuest"));
+        fetchServedOrders();
         fetchOrderDetails();
-    }, []);
+        setRefresh(false);
+    }, [selectedOrder, refresh]);
 
     const handlePayment = async () => {
-        const orderID = localStorage.getItem("bill"); // Get orderID from local storage
+        if (!selectedOrder) return;
         const response = await axios.post("payment", {
-            orderID: orderID,
+            orderID: selectedOrder,
         });
 
         if (response.data.status === "success") {
-            setHeader("Thank you for spending time with Brodium");
-            localStorage.removeItem("bill");
+            setSelectedOrder(null);
 
             // Call set_order_status API to set the order status to 4 (Archived)
             axios
                 .post("set_order_status", {
-                    orderID: orderID,
+                    orderID: selectedOrder,
                     newStatus: 4,
                 })
                 .then((response) => {
                     if (response.data.status !== "success") {
-                        showToastWithMessage("Failed to set order status");
+                        showToastWithMessage("Failed to archive the order!");
+                    } else {
+                        setRefresh(true);
+                        showToastWithMessage(
+                            "Thank you for spending time with Brodium"
+                        );
                     }
                 })
                 .catch((error) => {
@@ -82,13 +99,23 @@ const Payment = () => {
             style={{
                 marginLeft: "7.5rem",
                 display: "flex",
-                justifyContent: "center",
+                flexDirection: "column",
+                justifyContent: "flex-start",
                 alignItems: "center",
                 height: "100vh",
             }}
         >
-            <ToastContainer />
-            <MDBCard>
+            <div className="button-group">
+                {servedOrders.map((order) => (
+                    <MDBBtn
+                        color="dark"
+                        onClick={() => setSelectedOrder(order.orderID)}
+                    >
+                        Order {order.orderID}
+                    </MDBBtn>
+                ))}
+            </div>
+            <MDBCard style={{ marginTop: "20px" }}>
                 <MDBCardBody className="mx-4">
                     <MDBContainer>
                         <p
@@ -99,7 +126,7 @@ const Payment = () => {
                                 fontWeight: "bold",
                             }}
                         >
-                            {header}
+                            Your Bill
                         </p>
                         <MDBRow>
                             <MDBTypography listUnStyled>

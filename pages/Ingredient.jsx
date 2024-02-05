@@ -8,7 +8,7 @@ import {
     MDBTableHead,
     MDBTableBody,
 } from "mdb-react-ui-kit";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const ManageIngredients = () => {
     const showToastWithMessage = (message) => {
@@ -109,7 +109,6 @@ const ManageIngredients = () => {
                 height: "100vh",
             }}
         >
-            <ToastContainer />
             <MDBTable color="dark" hover striped className="my-table">
                 <MDBTableHead>
                     <tr>

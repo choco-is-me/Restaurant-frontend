@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Table, Form, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const ManageStaff = () => {
     const [staffList, setStaffList] = useState([]);
@@ -11,11 +12,25 @@ const ManageStaff = () => {
     const [shift, setShift] = useState("");
     const [specialty, setSpecialty] = useState("");
 
+    const showToastWithMessage = (message) => {
+        toast(message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            className: "toast-message",
+            progressClassName: "toast-progress-bar",
+        });
+    };
+
     const fetchData = () => {
         axios
             .get("staff_list")
             .then((response) => setStaffList(response.data))
-            .catch((error) => console.error(`Error: ${error}`));
+            .catch((error) => showToastWithMessage(`Error: ${error}`));
     };
 
     useEffect(() => {
@@ -31,7 +46,7 @@ const ManageStaff = () => {
                 specialty,
             })
             .then(fetchData)
-            .catch((error) => console.error(`Error: ${error}`));
+            .catch((error) => showToastWithMessage(`Error: ${error}`));
     };
 
     const handleEditStaff = () => {
@@ -48,7 +63,7 @@ const ManageStaff = () => {
                 fetchData();
                 setSelectedStaff(null); // Reset the selected staff
             })
-            .catch((error) => console.error(`Error: ${error}`));
+            .catch((error) => showToastWithMessage(`Error: ${error}`));
     };
 
     const handleRemoveStaff = (staffId) => {
@@ -57,7 +72,7 @@ const ManageStaff = () => {
                 staffID: staffId,
             })
             .then(fetchData)
-            .catch((error) => console.error(`Error: ${error}`));
+            .catch((error) => showToastWithMessage(`Error: ${error}`));
     };
 
     return (
