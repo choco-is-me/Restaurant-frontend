@@ -46,12 +46,13 @@ function Record() {
     return (
         <MDBContainer
             style={{
+                marginTop: "3rem",
                 display: "flex",
                 marginLeft: "7rem",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "100vh",
+                minHeight: "100vh",
                 borderCollapse: "collapse",
                 borderSpacing: "0",
                 width: "100%",
