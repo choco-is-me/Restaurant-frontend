@@ -72,7 +72,11 @@ const ManageStaff = () => {
                 staffID: staffId,
             })
             .then(fetchData)
-            .catch((error) => showToastWithMessage(`Error: ${error}`));
+            .catch((error) =>
+                showToastWithMessage(
+                    `StaffID still involved with other records`
+                )
+            );
     };
 
     return (
