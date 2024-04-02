@@ -21,7 +21,7 @@ import Logout from "./pages/Logout";
 import Axios from "axios";
 
 const App = () => {
-    Axios.defaults.baseURL = "http://192.168.0.163:8000/";
+    Axios.defaults.baseURL = "http://192.168.0.59:8000/";
 
     let role = localStorage.getItem("role");
     if (typeof role === "undefined" || role === null) {
